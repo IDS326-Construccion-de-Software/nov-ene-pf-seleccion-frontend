@@ -1,25 +1,34 @@
-import { EarningsChart, Highlights, TeamMeeting, Teams } from './blocks';
+import {
+    AsignaturasAprobadas,
+    CreditosAprobados,
+    DatosGenerales,
+    IndiceGeneralChart,
+    TrimestresCard
+} from '@/pages/dashboards/applayout2/blocks';
 
 const AppLayoutLightSidebarContent = () => {
   return (
     <div className="grid gap-5 lg:gap-7.5">
+      {/* Fila 1: Datos generales + Trimestres cursados */}
       <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
-        <div className="lg:col-span-1">
-          <Highlights limit={3} />
-        </div>
-
         <div className="lg:col-span-2">
-          <EarningsChart />
+          <DatosGenerales className="h-full" />
+        </div>
+        <div className="lg:col-span-1">
+          <TrimestresCard className="h-full" />
         </div>
       </div>
 
+      {/* Fila 2: Índice general + Créditos aprobados + Asignaturas aprobadas */}
       <div className="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
         <div className="lg:col-span-1">
-          <TeamMeeting />
+          <IndiceGeneralChart className="h-full" />
         </div>
-
-        <div className="lg:col-span-2">
-          <Teams />
+        <div className="lg:col-span-1">
+          <CreditosAprobados className="h-full" />
+        </div>
+        <div className="lg:col-span-1">
+          <AsignaturasAprobadas className="h-full" />
         </div>
       </div>
     </div>
