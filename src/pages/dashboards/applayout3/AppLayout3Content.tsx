@@ -1,6 +1,6 @@
 import { toAbsoluteUrl } from '@/utils';
 import { MiscCreateTeam } from '@/partials/misc';
-import { BlockList } from '@/pages/account/security/privacy-settings';
+import { BlockList } from '@/others/account/security/privacy-settings';
 import { Highlights, Teams } from '@/pages/dashboards/applayout';
 import { ManageData } from '@/pages/dashboards/applayout2/blocks';
 import { Integrations } from './blocks';

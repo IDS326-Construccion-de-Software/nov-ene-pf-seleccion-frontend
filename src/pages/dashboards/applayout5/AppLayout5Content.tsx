@@ -1,5 +1,5 @@
 import { Teams } from '@/pages/dashboards/applayout';
-import { TeamInfo } from '@/pages/account/members/team-info';
+import { TeamInfo } from '@/others/account/members/team-info';
 import { MiscFaq } from '@/partials/misc';
 import { Options } from './blocks';
 
