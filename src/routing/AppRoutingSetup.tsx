@@ -1,27 +1,7 @@
 import { ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { DefaultPage, AppLayoutDarkSidebarPage } from '@/pages/dashboards';
-import {
-  ProfileActivityPage,
-  ProfileBloggerPage,
-  CampaignsCardPage,
-  CampaignsListPage,
-  ProjectColumn2Page,
-  ProjectColumn3Page,
-  ProfileCompanyPage,
-  ProfileCreatorPage,
-  ProfileCRMPage,
-  ProfileDefaultPage,
-  ProfileEmptyPage,
-  ProfileFeedsPage,
-  ProfileGamerPage,
-  ProfileModalPage,
-  ProfileNetworkPage,
-  ProfileNFTPage,
-  ProfilePlainPage,
-  ProfileTeamsPage,
-  ProfileWorksPage
-} from '@/pages/public-profile';
+
 import {
   AccountActivityPage,
   AccountAllowedIPAddressesPage,
@@ -57,7 +37,7 @@ import {
   AccountTeamsPage,
   AccountTeamsStarterPage,
   AccountUserProfilePage
-} from '@/pages/account';
+} from '@/others/account';
 import {
   NetworkAppRosterPage,
   NetworkMarketAuthorsPage,
@@ -71,7 +51,7 @@ import {
   NetworkStoreClientsPage,
   NetworkUserTableTeamCrewPage,
   NetworkVisitorsPage
-} from '@/pages/network';
+} from '@/others/network';
 
 import { AuthPage } from '@/auth';
 import { RequireAuth } from '@/auth/RequireAuth';
@@ -82,33 +62,54 @@ import {
   AuthenticationAccountDeactivatedPage,
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
+import { ProfileDetailsPage } from '@/pages/profile/pages';
+import { FinancialAccountOverviewPage } from '@/pages/financial-account/pages/financial-account-overview/financial-account-overview.component';
+import { SubjectPreselectionPage, SubjectSelectionPage } from '@/pages/processes/pages';
+import { AcademicSchedulePage, QualificationPage } from '@/pages/revision/pages';
+import { CareerCurriculumPage } from '@/pages/academic-record/pages/career-curriculum';
+import { RecordCareerPage } from '@/pages/academic-record/pages';
+import { SupportCenterPage } from '@/pages/help/pages/support-center/support-center.component';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
     <Routes>
       <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
+          {/* Dashboard Pages */}
           <Route path="/" element={<DefaultPage />} />
           <Route path="/dark-sidebar" element={<AppLayoutDarkSidebarPage />} />
-          <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
-          <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />
-          <Route path="/public-profile/profiles/company" element={<ProfileCompanyPage />} />
-          <Route path="/public-profile/profiles/nft" element={<ProfileNFTPage />} />
-          <Route path="/public-profile/profiles/blogger" element={<ProfileBloggerPage />} />
-          <Route path="/public-profile/profiles/crm" element={<ProfileCRMPage />} />
-          <Route path="/public-profile/profiles/gamer" element={<ProfileGamerPage />} />
-          <Route path="/public-profile/profiles/feeds" element={<ProfileFeedsPage />} />
-          <Route path="/public-profile/profiles/plain" element={<ProfilePlainPage />} />
-          <Route path="/public-profile/profiles/modal" element={<ProfileModalPage />} />
-          <Route path="/public-profile/projects/3-columns" element={<ProjectColumn3Page />} />
-          <Route path="/public-profile/projects/2-columns" element={<ProjectColumn2Page />} />
-          <Route path="/public-profile/works" element={<ProfileWorksPage />} />
-          <Route path="/public-profile/teams" element={<ProfileTeamsPage />} />
-          <Route path="/public-profile/network" element={<ProfileNetworkPage />} />
-          <Route path="/public-profile/activity" element={<ProfileActivityPage />} />
-          <Route path="/public-profile/campaigns/card" element={<CampaignsCardPage />} />
-          <Route path="/public-profile/campaigns/list" element={<CampaignsListPage />} />
-          <Route path="/public-profile/empty" element={<ProfileEmptyPage />} />
+
+          {/* Profile Pages */}
+          <Route path="/profile/details" element={<ProfileDetailsPage />} />
+
+          {/* Financial Account Pages */}
+
+          <Route path="/financial-account/overview" element={<FinancialAccountOverviewPage />} />
+
+          {/* Processes Pages */}
+
+          <Route path="/processes/subject-selection" element={<SubjectSelectionPage />} />
+
+          <Route path="/processes/subject-preselection" element={<SubjectPreselectionPage />} />
+
+          {/* Revision Pages */}
+
+          <Route path="/revision/academic-schedule" element={<AcademicSchedulePage />} />
+
+          <Route path="/revision/qualification" element={<QualificationPage />} />
+
+          {/*Academic Record Pages */}
+
+          <Route path="/academic-record/career-curriculum" element={<CareerCurriculumPage />} />
+
+          <Route path="/academic-record/record-career" element={<RecordCareerPage />} />
+
+          {/* Help Pages */}
+
+          <Route path="/help/support-center" element={<SupportCenterPage />} />
+
+          {/* Others */}
+
           <Route path="/account/home/get-started" element={<AccountGetStartedPage />} />
           <Route path="/account/home/user-profile" element={<AccountUserProfilePage />} />
           <Route path="/account/home/company-profile" element={<AccountCompanyProfilePage />} />
@@ -152,7 +153,11 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/account/members/members-starter" element={<AccountMembersStarterPage />} />
           <Route path="/account/members/team-members" element={<AccountTeamMembersPage />} />
           <Route path="/account/members/import-members" element={<AccountImportMembersPage />} />
-          <Route path="/account/members/roles" element={<AccountRolesPage />} />
+          <Route
+            path="/account/members/import { Route } from 'react-router-dom';
+roles"
+            element={<AccountRolesPage />}
+          />
           <Route
             path="/account/members/permissions-toggle"
             element={<AccountPermissionsTogglePage />}

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import { Container } from '@/components/container';
 import { Toolbar, ToolbarDescription, ToolbarHeading, ToolbarPageTitle } from '@/partials/toolbar';
-import { PageNavbar } from '@/pages/account';
+import { PageNavbar } from '@/others/account';
 
 import { ModalAccountDeactivated } from '@/partials/modals/account-deactivated';
-import { AccountGetStartedContent } from '@/pages/account/home/get-started';
+import { AccountGetStartedContent } from '@/others/account/home/get-started';
 
 const AuthenticationAccountDeactivatedPage = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(true);

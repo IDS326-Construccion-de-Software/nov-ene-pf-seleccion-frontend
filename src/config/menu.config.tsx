@@ -22,12 +22,23 @@ export const MENU_SIDEBAR: TMenuConfig = [
   {
     title: 'Perfil',
     icon: 'profile-circle',
-    path: ''
+    path: '/profile/details'
+    // children: [
+    //   {
+    //     title: 'Profiles',
+    //     children: [
+    //       {
+    //         title: 'Default',
+    //         path: '/public-profile/profiles/default'
+    //       }
+    //     ]
+    //   }
+    // ]
   },
   {
     title: 'Cuenta financiera',
     icon: 'wallet',
-    path: ''
+    path: '/financial-account/overview'
   },
   {
     title: 'Procesos',
@@ -35,11 +46,11 @@ export const MENU_SIDEBAR: TMenuConfig = [
     children: [
       {
         title: 'Selección de asignaturas',
-        path: ''
+        path: '/processes/subject-selection'
       },
       {
         title: 'Preselección de asignaturas',
-        path: ''
+        path: '/processes/subject-preselection'
       }
     ]
   },
@@ -49,11 +60,11 @@ export const MENU_SIDEBAR: TMenuConfig = [
     children: [
       {
         title: 'Calificaciones',
-        path: ''
+        path: '/revision/qualification'
       },
       {
         title: 'Horario',
-        path: ''
+        path: '/revision/academic-schedule'
       }
     ]
   },
@@ -63,18 +74,18 @@ export const MENU_SIDEBAR: TMenuConfig = [
     children: [
       {
         title: 'Pensum de carrera',
-        path: ''
+        path: '/academic-record/career-curriculum'
       },
       {
         title: 'Record según pensum',
-        path: ''
+        path: '/academic-record/record-career'
       }
     ]
   },
   {
     title: 'Ayuda',
     icon: 'question',
-    path: ''
+    path: '/help/support-center'
   }
 
   // Opciones de menu
@@ -561,15 +572,15 @@ export const MENU_MEGA: TMenuConfig = [
   },
   {
     title: 'Horario',
-    path: '/horario'
+    path: '/revision/academic-schedule'
   },
   {
     title: 'Calificaciones',
-    path: '/calificaciones'
+    path: '/revision/qualification'
   },
   {
     title: 'Record según pensum',
-    path: '/record'
+    path: '/academic-record/record-career'
   }
   // {
   //   title: 'Network',

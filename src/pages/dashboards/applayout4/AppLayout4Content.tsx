@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { BlockList } from '@/pages/account/security/privacy-settings';
+import { BlockList } from '@/others/account/security/privacy-settings';
 import { MiscCreateTeam } from '@/partials/misc';
 import { toAbsoluteUrl } from '@/utils';
 import { Highlights, Teams } from '..';

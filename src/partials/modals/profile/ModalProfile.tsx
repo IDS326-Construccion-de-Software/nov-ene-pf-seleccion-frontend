@@ -17,7 +17,7 @@ import {
   Contributions,
   Projects,
   WorkExperience
-} from '@/pages/public-profile/profiles/default';
+} from '@/pages/profile/pages/default';
 
 interface IModalProfileProps {
   open: boolean;

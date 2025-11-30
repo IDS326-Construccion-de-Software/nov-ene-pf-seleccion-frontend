@@ -2,9 +2,9 @@ import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Container } from '@/components/container';
 import { Toolbar, ToolbarDescription, ToolbarHeading, ToolbarPageTitle } from '@/partials/toolbar';
-import { PageNavbar } from '@/pages/account';
+import { PageNavbar } from '@/others/account';
 import { ModalWelcomMessage } from '@/partials/modals/welcome-message';
-import { AccountGetStartedContent } from '@/pages/account/home/get-started';
+import { AccountGetStartedContent } from '@/others/account/home/get-started';
 
 const AuthenticationWelcomeMessagePage = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(true);

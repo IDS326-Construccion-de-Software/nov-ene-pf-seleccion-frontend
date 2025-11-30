@@ -1,4 +1,4 @@
-import { BlockList, ReportSettings } from '@/pages/account/security/privacy-settings';
+import { BlockList, ReportSettings } from '@/others/account/security/privacy-settings';
 import { EntryCallout, Teams } from '@/pages/dashboards/applayout';
 import { Integrations, ManageData, MyBalance, Options } from './blocks';
 
