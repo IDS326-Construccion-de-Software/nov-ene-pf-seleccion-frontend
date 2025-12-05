@@ -28,6 +28,9 @@ const Layout = () => {
         {`
           .branded-bg {
             background-image: url('${toAbsoluteUrl('/media/images/2600x1600/Portada.jpg')}');
+            background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
           }
           .dark .branded-bg {
             background-image: url('${toAbsoluteUrl('/media/images/2600x1600/1-dark.png')}');

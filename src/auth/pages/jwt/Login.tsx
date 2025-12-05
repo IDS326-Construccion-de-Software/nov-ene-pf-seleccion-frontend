@@ -17,8 +17,8 @@ const loginSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  email: 'demo@keenthemes.com',
-  password: 'demo1234',
+  email: '',
+  password: '',
   remember: false
 };
 
@@ -126,17 +126,17 @@ const Login = () => {
               <input
                 placeholder="Escribir correo electrónico"
                 autoComplete="off"
-                // {...formik.getFieldProps('email')}
-                // className={clsx('form-control', {
-                //   'is-invalid': formik.touched.email && formik.errors.email
-                // })}
+                 {...formik.getFieldProps('email')}
+                 className={clsx('form-control', {
+                  'is-invalid': formik.touched.email && formik.errors.email
+                 })}
               />
             </label>
-            {/* {formik.touched.email && formik.errors.email && (
+             {formik.touched.email && formik.errors.email && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.email}
               </span>
-            )} */}
+            )} 
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-1">
@@ -147,10 +147,10 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Escribir contraseña"
                 autoComplete="off"
-                // {...formik.getFieldProps('password')}
-                // className={clsx('form-control', {
-                //   'is-invalid': formik.touched.password && formik.errors.password
-                // })}
+                 {...formik.getFieldProps('password')}
+                 className={clsx('form-control', {
+                   'is-invalid': formik.touched.password && formik.errors.password
+                 })}
               />
 
               <button className="btn btn-icon" onClick={togglePassword}>
@@ -161,11 +161,11 @@ const Login = () => {
                 />
               </button>
             </label>
-            {/* {formik.touched.password && formik.errors.password && (
+             {formik.touched.password && formik.errors.password && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.password}
               </span>
-            )} */}
+            )} 
             <div className="flex justify-end">
               <Link
                 to={
@@ -200,13 +200,13 @@ const Login = () => {
             {loading ? 'Por favor espere...' : 'Iniciar Sesión'}
           </button>
           <div className="flex items-center justify-center font-medium">
-            <span className="text-2sm text-gray-600 me-1.5">¿Necesitas una cuenta?</span>
+            <span className="text-2sm text-gray-600 me-1.5"></span>
             <Link
               to={currentLayout?.name === 'auth-branded' ? '/auth/signup' : '/auth/classic/signup'}
               className="text-2sm link"
             >
               <span className="text-1xl font-semibold text-foreground hover:text-primary">
-                Registrarse
+              
               </span>
             </Link>
           </div>
