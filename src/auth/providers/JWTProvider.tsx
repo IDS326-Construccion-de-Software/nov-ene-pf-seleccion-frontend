@@ -50,6 +50,19 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>();
 
+    // Restaurar sesión
+  useEffect(() => {
+    const init = async () => {
+      if (auth) {
+        await verify();
+      }
+      setLoading(false);
+    };
+
+    init();
+  }, []);
+
+
   const verify = async () => {
     if (auth) {
       try {
