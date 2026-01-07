@@ -1,2 +1,2 @@
 export * from './profile-details';
-// export * from './default/ProfileDefaultPage';
+export * from './change-password.page';
