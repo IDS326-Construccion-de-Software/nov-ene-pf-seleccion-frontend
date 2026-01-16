@@ -94,7 +94,10 @@ const AppRoutingSetup = (): ReactElement => {
 
           <Route path="/processes/subject-selection" element={<SubjectSelectionPage />} />
 
-          <Route path="/processes/subject-preselection" element={<SubjectPreselectionPage />} />
+          <Route
+            path="/processes/subject-preselection/:usuarioId?"
+            element={<SubjectPreselectionPage />}
+          />
 
           {/* Revision Pages */}
 

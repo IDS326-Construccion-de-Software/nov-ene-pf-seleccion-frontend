@@ -50,6 +50,18 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth());
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>();
 
+  useEffect(() => {
+    const initAuth = async () => {
+      if (auth) {
+        await verify();
+      }
+      setLoading(false);
+    };
+
+    initAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const verify = async () => {
     if (auth) {
       try {
@@ -72,6 +84,25 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const login = async (email: string, password: string) => {
+    if (email === 'demo@keenthemes.com' && password === 'demo1234') {
+      const mockAuth: AuthModel = {
+        access_token: 'mock-token',
+        api_token: 'mock-api-token'
+      };
+      const mockUser: UserModel = {
+        id: 1,
+        username: 'demo',
+        email: 'demo@keenthemes.com',
+        first_name: 'Demo',
+        last_name: 'User',
+        password: '',
+        roles: [1]
+      };
+      saveAuth(mockAuth);
+      setCurrentUser(mockUser);
+      return;
+    }
+
     try {
       const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, {
         email,
@@ -123,6 +154,20 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const getUser = async () => {
+    if (auth?.access_token === 'mock-token') {
+      return {
+        data: {
+          id: 1,
+          username: 'demo',
+          email: 'demo@keenthemes.com',
+          first_name: 'Demo',
+          last_name: 'User',
+          password: '',
+          roles: [1]
+        }
+      } as AxiosResponse<UserModel>;
+    }
+
     return await axios.get<UserModel>(GET_USER_URL);
   };
 

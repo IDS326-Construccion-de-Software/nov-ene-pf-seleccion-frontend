@@ -21,11 +21,13 @@ const ProvidersWrapper = ({ children }: PropsWithChildren) => {
         <SettingsProvider>
           <TranslationProvider>
             <HelmetProvider>
-              <LayoutProvider>
-                <LoadersProvider>
-                  <MenusProvider>{children}</MenusProvider>
-                </LoadersProvider>
-              </LayoutProvider>
+              <SnackbarProvider>
+                <LayoutProvider>
+                  <LoadersProvider>
+                    <MenusProvider>{children}</MenusProvider>
+                  </LoadersProvider>
+                </LayoutProvider>
+              </SnackbarProvider>
             </HelmetProvider>
           </TranslationProvider>
         </SettingsProvider>

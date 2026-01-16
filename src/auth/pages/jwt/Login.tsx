@@ -114,10 +114,10 @@ const Login = () => {
           <span className="border-t border-gray-200 w-full"></span>
         </div> */}
 
-          {/* <Alert variant="primary">
-          Use <span className="font-semibold text-gray-900">demo@keenthemes.com</span> username and{' '}
-          <span className="font-semibold text-gray-900">demo1234</span> password.
-        </Alert> */}
+          <Alert variant="primary">
+            Use <span className="font-semibold text-gray-900">demo@keenthemes.com</span> username
+            and <span className="font-semibold text-gray-900">demo1234</span> password.
+          </Alert>
 
           {formik.status && <Alert variant="danger">{formik.status}</Alert>}
           <div className="flex flex-col gap-1">
@@ -126,17 +126,17 @@ const Login = () => {
               <input
                 placeholder="Escribir correo electrónico"
                 autoComplete="off"
-                 {...formik.getFieldProps('email')}
-                 className={clsx('form-control', {
+                {...formik.getFieldProps('email')}
+                className={clsx('form-control', {
                   'is-invalid': formik.touched.email && formik.errors.email
-                 })}
+                })}
               />
             </label>
-             {formik.touched.email && formik.errors.email && (
+            {formik.touched.email && formik.errors.email && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.email}
               </span>
-            )} 
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-1">
@@ -147,10 +147,10 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Escribir contraseña"
                 autoComplete="off"
-                 {...formik.getFieldProps('password')}
-                 className={clsx('form-control', {
-                   'is-invalid': formik.touched.password && formik.errors.password
-                 })}
+                {...formik.getFieldProps('password')}
+                className={clsx('form-control', {
+                  'is-invalid': formik.touched.password && formik.errors.password
+                })}
               />
 
               <button className="btn btn-icon" onClick={togglePassword}>
@@ -161,11 +161,11 @@ const Login = () => {
                 />
               </button>
             </label>
-             {formik.touched.password && formik.errors.password && (
+            {formik.touched.password && formik.errors.password && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.password}
               </span>
-            )} 
+            )}
             <div className="flex justify-end">
               <Link
                 to={
@@ -205,14 +205,11 @@ const Login = () => {
               to={currentLayout?.name === 'auth-branded' ? '/auth/signup' : '/auth/classic/signup'}
               className="text-2sm link"
             >
-              <span className="text-1xl font-semibold text-foreground hover:text-primary">
-              
-              </span>
+              <span className="text-1xl font-semibold text-foreground hover:text-primary"></span>
             </Link>
           </div>
         </form>
       </div>
-      
     </div>
   );
 };
