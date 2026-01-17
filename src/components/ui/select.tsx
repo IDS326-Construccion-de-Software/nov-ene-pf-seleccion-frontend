@@ -15,7 +15,7 @@ const SelectValue = SelectPrimitive.Value;
 
 // Define size variants for SelectTrigger
 const selectTriggerVariants = cva(
-  'flex bg-light-light w-full items-center justify-between rounded-md border border-input text-sm ring-0 focus:border-primary focus:ring-0 font-medium ring-offset-0 ring-offset-background placeholder:text-muted-foreground hover:border-gray-400 focus:outline-none focus:ring-0 focus:border-primary data-[state=open]:border-primary focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+  'flex bg-light-light w-full items-center justify-between rounded-md border border-input text-sm ring-0 focus:border-gray-400 focus:ring-0 font-medium ring-offset-0 ring-offset-background placeholder:text-muted-foreground hover:border-gray-400 focus:outline-none focus:ring-0 data-[state=open]:border-gray-400 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
   {
     variants: {
       size: {
