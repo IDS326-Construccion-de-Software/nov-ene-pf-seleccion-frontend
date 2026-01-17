@@ -56,7 +56,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             <DotButton
               key={index}
               onClick={() => onDotButtonClick(index)}
-              className={`w-5 h-5 flex items-center justify-center rounded-full border border-primary-900/30 bg-white/80 hover:bg-primary-100 transition after:content-[''] after:w-2 after:h-2 after:rounded-full after:shadow-[inset_0_0_0_0.2rem_theme(colors.primary.900)] ${
+              className={`w-5 h-5 flex items-center justify-center rounded-full border border-primary-900/30 bg-white/80 hover:bg-primary-100 transition after:content-[''] after:w-2 after:h-2 after:rounded-full after:border-2 after:border-primary-900 ${
                 index === selectedIndex ? 'after:bg-primary' : 'after:bg-primary-200'
               }`}
             />
