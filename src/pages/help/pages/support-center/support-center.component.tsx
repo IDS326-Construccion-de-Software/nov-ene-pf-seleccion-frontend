@@ -16,13 +16,12 @@ import {
 } from '@/components/ui/select';
 
 const SupportCenterPage = () => {
-  const [studentId, setStudentId] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
+  const [subjects, setSubjects] = useState<string[]>(['']);
   const [reason, setReason] = useState<string>('');
   const [otherReason, setOtherReason] = useState<string>('');
 
   const careers = ['IDS', 'IND', 'ICS', 'INS', 'IEE', 'IME', 'ICF'];
-  const subjects = [
+  const availableSubjects = [
     'CBM201 - Matemáticas',
     'CBM301 - Física',
     'CBM302 - Química',
@@ -33,16 +32,12 @@ const SupportCenterPage = () => {
 
   const requestReasons = [
     { value: 'schedule', label: 'Conflicto de horario entre asignaturas' },
-    { value: 'quota', label: 'Falta de cupo en una sección' },
+    { value: 'quota', label: 'Falta de cupo en sección' },
     { value: 'withdrawal', label: 'Baja involuntaria de asignatura' },
     { value: 'notfound', label: 'No aparece la asignatura' },
     { value: 'other', label: 'Otro' }
   ];
 
-  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 7);
-    setStudentId(value);
-  };
 
   const handleOtherReasonChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value.slice(0, 255);
@@ -56,15 +51,32 @@ const SupportCenterPage = () => {
     }
   };
 
+  const handleSubjectChange = (index: number, value: string) => {
+    const newSubjects = [...subjects];
+    newSubjects[index] = value;
+    setSubjects(newSubjects);
+  };
+
+  const handleAddSubject = () => {
+    if (subjects.length < 5) {
+      setSubjects([...subjects, '']);
+    }
+  };
+
+  const handleRemoveSubject = (index: number) => {
+    const newSubjects = subjects.filter((_, i) => i !== index);
+    setSubjects(newSubjects.length === 0 ? [''] : newSubjects);
+  };
+
   const handleReset = () => {
-    setStudentId('');
-    setSubject('');
+    setSubjects(['']);
     setReason('');
     setOtherReason('');
   };
 
   const isFormValid = () => {
-    if (studentId.length !== 7 || !subject || !reason) {
+    const validSubjects = subjects.filter(s => s.trim());
+    if (validSubjects.length === 0 || !reason) {
       return false;
     }
     if (reason === 'other' && !otherReason.trim()) {
@@ -75,9 +87,9 @@ const SupportCenterPage = () => {
 
   const handleCreateTicket = () => {
     if (isFormValid()) {
+      const validSubjects = subjects.filter(s => s.trim());
       console.log({
-        studentId,
-        subject,
+        subjects: validSubjects,
         reason,
         otherReason: reason === 'other' ? otherReason : null
       });
@@ -93,39 +105,56 @@ const SupportCenterPage = () => {
 
       <div className="mt-6 p-6 bg-white rounded-lg shadow">
         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-          {/* Student ID Input */}
-          <div className="space-y-2">
-            <Label htmlFor="student-id">ID de Estudiante</Label>
-            <Input
-              id="student-id"
-              type="text"
-              inputMode="numeric"
-              maxLength={7}
-              value={studentId}
-              onChange={handleStudentIdChange}
-              className="w-full"
-            />
-            <p className="text-xs text-gray-500">{studentId.length}/7 caracteres</p>
+
+          {/* Listado de asignaturas */}
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <Label>Asignaturas</Label>
+              <span className="text-xs text-gray-500">{subjects.filter(s => s.trim()).length}/5</span>
+            </div>
+            <div className="space-y-2">
+              {subjects.map((subject, index) => (
+                <div key={index} className="flex gap-2 items-end">
+                  <div className="flex-1 space-y-1">
+                    <Select value={subject} onValueChange={(value) => handleSubjectChange(index, value)}>
+                      <SelectTrigger id={`subject-${index}`}>
+                        <SelectValue placeholder="Selecciona una asignatura" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableSubjects.map((s) => (
+                          <SelectItem key={s} value={s}>
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {subjects.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleRemoveSubject(index)}
+                      className="px-3 py-2 h-10"
+                    >
+                      Eliminar
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {subjects.length < 5 && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddSubject}
+                className="w-full mt-2"
+              >
+                + Agregar asignatura
+              </Button>
+            )}
           </div>
 
-          {/* Subject Dropdown */}
-          <div className="space-y-2">
-            <Label htmlFor="subject">Asignatura</Label>
-            <Select value={subject} onValueChange={setSubject}>
-              <SelectTrigger id="subject">
-                <SelectValue placeholder="Selecciona una asignatura" />
-              </SelectTrigger>
-              <SelectContent>
-                {subjects.map((s) => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Request Reason Radio Buttons */}
+          {/* Botones de motivo de solicitud */}
           <div className="space-y-3">
             <Label>Motivo de solicitud</Label>
             <div className="space-y-2">
@@ -151,7 +180,7 @@ const SupportCenterPage = () => {
             </div>
           </div>
 
-          {/* Other Reason Textarea */}
+          {/* Textarea de otro motivo */}
           {reason === 'other' && (
             <div className="space-y-2">
               <Textarea
@@ -165,7 +194,7 @@ const SupportCenterPage = () => {
             </div>
           )}
 
-          {/* Buttons */}
+          {/* Botones de cancelar y Enviar */}
           <div className="flex gap-3 pt-4">
             <Button
               type="button"
