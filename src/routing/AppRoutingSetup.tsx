@@ -62,19 +62,19 @@ import {
   AuthenticationAccountDeactivatedPage,
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
-import { ProfileDetailsPage } from '@/pages/profile/pages';
-import { ChangePasswordPage } from '@/pages/profile/pages';
+
 import { FinancialAccountOverviewPage } from '@/pages/financial-account/pages/financial-account-overview/financial-account-overview.component';
 import { SubjectPreselectionPage, SubjectSelectionPage } from '@/pages/processes/pages';
 import { AcademicSchedulePage, QualificationPage } from '@/pages/revision/pages';
 import { CareerCurriculumPage } from '@/pages/academic-record/pages/career-curriculum';
 import { RecordCareerPage } from '@/pages/academic-record/pages';
 import { SupportCenterPage } from '@/pages/help/pages/support-center/support-center.component';
+import { ProfileDetailsPage } from '@/pages/profile/pages';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
     <Routes>
-      <Route path="/profile/change-password" element={<ChangePasswordPage />} />
+      {/* <Route path="/profile/change-password" element={<ChangePasswordPage />} /> */}
 
       <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
@@ -83,16 +83,19 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/dark-sidebar" element={<AppLayoutDarkSidebarPage />} />
 
           {/* Profile Pages */}
-          <Route path="/profile/details" element={<ProfileDetailsPage />}  /> 
+          <Route path="/profile/details" element={<ProfileDetailsPage />} />
           {/* aqui va la ruta de change-password esta afuera para poder probar ya que la api de login para pruebas dejo de funcionar */}
-          
+
           {/* Financial Account Pages */}
 
           <Route path="/financial-account/overview" element={<FinancialAccountOverviewPage />} />
 
           {/* Processes Pages */}
 
-          <Route path="/processes/subject-selection" element={<SubjectSelectionPage />} />
+          <Route
+            path="/processes/subject-selection/:usuarioId?"
+            element={<SubjectSelectionPage />}
+          />
 
           <Route
             path="/processes/subject-preselection/:usuarioId?"
@@ -161,8 +164,7 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/account/members/team-members" element={<AccountTeamMembersPage />} />
           <Route path="/account/members/import-members" element={<AccountImportMembersPage />} />
           <Route
-            path="/account/members/import { Route } from 'react-router-dom';
-roles"
+            path="/account/members/import { Route } from 'react-router-dom'; roles"
             element={<AccountRolesPage />}
           />
           <Route

@@ -51,6 +51,7 @@ export interface AsignaturaOferta {
   motivoBloqueo: string | null;
   totalSeccionesAsignatura: number;
   procesada?: boolean;
+  definitiva?: boolean;
   secciones: SeccionOferta[];
 }
 

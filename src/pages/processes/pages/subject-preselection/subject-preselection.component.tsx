@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Container, KeenIcon } from '@/components';
 import { Toolbar, ToolbarHeading, ToolbarActions } from '@/layouts/applayout/toolbar';
@@ -20,9 +20,11 @@ import {
 import { useOfertaPreseleccion, useResumenPreseleccion } from './hooks/useOfertaPreseleccion';
 import { getFase } from '@/services/periodoconfig/peridoconfig.service';
 import { finalizarPreseleccion } from '@/services/preselection/preselection.service';
+import { useAuthContext } from '@/auth';
 
 const SubjectPreselectionPage = () => {
-  const { usuarioId = '2' } = useParams<{ usuarioId: string }>();
+  const { auth } = useAuthContext();
+  const usuarioId = String(auth?.usuarioId);
   const navigate = useNavigate();
   const [filters, setFilters] = useState<any>({});
   const [showFaseDialog, setShowFaseDialog] = useState(false);
@@ -44,7 +46,7 @@ const SubjectPreselectionPage = () => {
           setShowFaseDialog(true);
           setTimeout(() => {
             navigate('/');
-          }, 6000);
+          }, 3000);
         }
       } catch (error) {
         console.error('Error al obtener la fase:', error);
@@ -91,7 +93,7 @@ const SubjectPreselectionPage = () => {
     return (
       <Container width="fluid" className="p-4 sm:p-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
         </div>
       </Container>
     );
@@ -155,7 +157,6 @@ const SubjectPreselectionPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Solo renderizar el contenido si está en la fase correcta */}
       {faseActual === 'Preseleccion' && (
         <Container width="fluid" className="p-4 sm:p-8">
           <Toolbar>

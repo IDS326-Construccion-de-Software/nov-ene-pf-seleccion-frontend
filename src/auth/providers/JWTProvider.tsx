@@ -11,13 +11,14 @@ import {
 
 import * as authHelper from '../_helpers';
 import { type AuthModel, type UserModel } from '@/auth';
+import * as authService from '@/services/auth/auth.service';
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
-export const LOGIN_URL = `${API_URL}/login`;
-export const REGISTER_URL = `${API_URL}/register`;
-export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
-export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
-export const GET_USER_URL = `${API_URL}/user`;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5138';
+export const LOGIN_URL = `${API_URL}/api/auth/login`;
+export const REGISTER_URL = `${API_URL}/api/auth/register`;
+export const FORGOT_PASSWORD_URL = `${API_URL}/api/auth/forgot-password`;
+export const RESET_PASSWORD_URL = `${API_URL}/api/auth/reset-password`;
+export const GET_USER_URL = `${API_URL}/api/auth/user`;
 
 interface AuthContextProps {
   loading: boolean;
@@ -65,8 +66,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const verify = async () => {
     if (auth) {
       try {
-        const { data: user } = await getUser();
-        setCurrentUser(user);
+        // const { data: user } = await getUser();
+        // setCurrentUser(user);
+        // Por ahora dejamos el usuario como está, está en el contexto
       } catch {
         saveAuth(undefined);
         setCurrentUser(undefined);
@@ -84,36 +86,42 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const login = async (email: string, password: string) => {
-    if (email === 'demo@keenthemes.com' && password === 'demo1234') {
-      const mockAuth: AuthModel = {
-        access_token: 'mock-token',
-        api_token: 'mock-api-token'
-      };
-      const mockUser: UserModel = {
-        id: 1,
-        username: 'demo',
-        email: 'demo@keenthemes.com',
-        first_name: 'Demo',
-        last_name: 'User',
-        password: '',
-        roles: [1]
-      };
-      saveAuth(mockAuth);
-      setCurrentUser(mockUser);
-      return;
-    }
-
     try {
-      const { data: auth } = await axios.post<AuthModel>(LOGIN_URL, {
-        email,
-        password
-      });
+      const loginResponse = await authService.login(email, password);
+
+      const tokenPayload = authService.decodeJWT(loginResponse.accessToken);
+
+      const auth: AuthModel = {
+        access_token: loginResponse.accessToken,
+        api_token: loginResponse.accessToken, // Usamos el mismo token
+        refreshToken: loginResponse.refreshToken,
+        nombreUsuario: loginResponse.nombreUsuario,
+        rol: loginResponse.rol,
+        usuarioId: tokenPayload?.sub || '',
+        cambioClaveSolicitado: loginResponse.cambioClaveSolicitado
+      };
+
+      const user: UserModel = {
+        id: tokenPayload?.sub || '',
+        username: loginResponse.nombreUsuario,
+        email: tokenPayload?.email || email,
+        first_name: loginResponse.nombreUsuario.split(' ')[0],
+        last_name: loginResponse.nombreUsuario.split(' ').slice(1).join(' '),
+        password: '',
+        roles: [loginResponse.rol],
+        nombreUsuario: loginResponse.nombreUsuario,
+        rol: loginResponse.rol,
+        usuarioId: tokenPayload?.sub || '',
+        cambioClaveSolicitado: loginResponse.cambioClaveSolicitado
+      };
+
       saveAuth(auth);
-      const { data: user } = await getUser();
       setCurrentUser(user);
-    } catch (error) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.accessToken}`;
+    } catch (error: any) {
       saveAuth(undefined);
-      throw new Error(`Error ${error}`);
+      setCurrentUser(undefined);
+      throw error;
     }
   };
 
@@ -154,26 +162,26 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const getUser = async () => {
-    if (auth?.access_token === 'mock-token') {
-      return {
-        data: {
-          id: 1,
-          username: 'demo',
-          email: 'demo@keenthemes.com',
-          first_name: 'Demo',
-          last_name: 'User',
-          password: '',
-          roles: [1]
-        }
-      } as AxiosResponse<UserModel>;
-    }
-
     return await axios.get<UserModel>(GET_USER_URL);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const currentAuth = auth;
+
+    // Limpiar inmediatamente el estado local y los headers
     saveAuth(undefined);
     setCurrentUser(undefined);
+    delete axios.defaults.headers.common['Authorization'];
+
+    try {
+      if (currentAuth?.access_token) {
+        // Llamar al endpoint de logout con el token que teníamos
+        await authService.logout(currentAuth.access_token, currentAuth.refreshToken);
+      }
+    } catch (error) {
+      // Error silencioso durante logout, ya limpiamos el estado
+      console.error('Error al hacer logout en el servidor:', error);
+    }
   };
 
   return (
