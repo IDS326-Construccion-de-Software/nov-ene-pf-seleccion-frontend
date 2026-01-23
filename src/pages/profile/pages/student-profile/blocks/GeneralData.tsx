@@ -27,112 +27,112 @@ const GeneralData = ({
 }: GeneralDataProps) => {
   return (
     <div className="card h-full">
-      <div className="card-header py-5">
-        <h3 className="card-title flex items-center gap-3 text-lg">
-          <KeenIcon icon="profile-user" className="text-2xl text-primary" />
+      <div className="card-header">
+        <h3 className="card-title flex items-center gap-2">
+          <KeenIcon icon="profile-user" className="text-xl text-primary" />
           Datos generales
         </h3>
       </div>
       
-      <div className="card-body py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+      <div className="card-body">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
           {/* Left Column */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* ID */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">Id:</span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Id:</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {studentId}
               </span>
             </div>
 
             {/* Program */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">Programa:</span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Programa:</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {program}
               </span>
             </div>
 
             {/* Academic Status */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Condición académica:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {academicStatus}
               </span>
             </div>
 
             {/* Entry Term */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Trimestre de ingreso:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {entryTerm}
               </span>
             </div>
 
             {/* Last Condition */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Última condición:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {lastCondition}
               </span>
             </div>
           </div>
 
           {/* Right Column */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* Trimester Index */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Índice trimestral:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {trimesterIndex}
               </span>
             </div>
 
             {/* Entry Term (right side) */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Trimestre de ingreso:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {entryTermRight}
               </span>
             </div>
 
             {/* Current Trimester */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Trimestre actual:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {currentTrimester}
               </span>
             </div>
 
             {/* General Index */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Índice general:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {generalIndex}
               </span>
             </div>
 
             {/* Approved Subjects */}
             <div className="flex flex-col">
-              <span className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Asignaturas aprobadas:
               </span>
-              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {approvedSubjects}
               </span>
             </div>

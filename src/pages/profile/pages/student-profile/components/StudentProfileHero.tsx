@@ -21,45 +21,45 @@ const StudentProfileHero = ({
       <div className="card-body p-0">
         {/* Banner Background */}
         <div 
-          className="relative h-56 rounded-t-xl bg-cover bg-center"
+          className="relative h-48 rounded-t-xl bg-cover bg-center"
           style={{
             backgroundImage: `url('${toAbsoluteUrl('/media/images/2600x1600/Portada.jpg')}')`
           }}
         >
           {/* Profile Image - Centered at bottom of banner */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-20">
+          <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16">
             <div className="relative">
               <img
                 src={toAbsoluteUrl(avatar)}
                 alt={name}
-                className="w-40 h-40 rounded-full border-4 border-white shadow-lg object-cover"
+                className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
               />
             </div>
           </div>
         </div>
 
         {/* Profile Information */}
-        <div className="flex flex-col items-center pt-24 pb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-5">
+        <div className="flex flex-col items-center pt-20 pb-6">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             {name}
           </h1>
 
-          <div className="flex flex-wrap gap-8 justify-center text-base text-gray-600 dark:text-gray-400">
+          <div className="flex flex-wrap gap-6 justify-center text-sm text-gray-600 dark:text-gray-400">
             {/* Student ID */}
             <div className="flex items-center gap-2">
-              <KeenIcon icon="badge" className="text-xl" />
+              <KeenIcon icon="badge" className="text-lg" />
               <span>{studentId}</span>
             </div>
 
             {/* Location */}
             <div className="flex items-center gap-2">
-              <KeenIcon icon="geolocation" className="text-xl" />
+              <KeenIcon icon="geolocation" className="text-lg" />
               <span>{location}</span>
             </div>
 
             {/* Email */}
             <div className="flex items-center gap-2">
-              <KeenIcon icon="sms" className="text-xl" />
+              <KeenIcon icon="sms" className="text-lg" />
               <span>{email}</span>
             </div>
           </div>
