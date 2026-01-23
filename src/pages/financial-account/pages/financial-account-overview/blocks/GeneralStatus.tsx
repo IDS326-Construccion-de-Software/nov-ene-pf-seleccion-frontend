@@ -24,7 +24,7 @@ export const GeneralStatus = ({ data }: GeneralStatusProps) => {
             </p>
           </div>
           <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
-            <KeenIcon icon="wallet" className="text-emerald-600" />
+            <KeenIcon iconName="wallet" className="text-emerald-600" />
             <div className="text-right">
               <p className="text-[11px] uppercase text-gray-500 font-semibold">Total a pagar</p>
               <p className="text-base font-bold text-gray-900">
@@ -87,6 +87,13 @@ export const GeneralStatus = ({ data }: GeneralStatusProps) => {
                 className="h-2.5 rounded-full bg-[#20BF6B]"
                 style={{ width: `${data.porcentaje_pagado}%` }}
               ></div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <span className="w-2 h-2 rounded-full bg-[#20BF6B]"></span>
+              <span className="font-semibold text-gray-700">Pagado</span>
+              <span className="w-2 h-2 rounded-full bg-[#FADADD]"></span>
+              <span className="font-semibold text-gray-700">Pendiente</span>
             </div>
           </div>
         </div>
