@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { Container, KeenIcon } from '@/components';
 import { Toolbar, ToolbarHeading, ToolbarActions } from '@/layouts/applayout/toolbar';
 import { Button } from '@/components/ui/button';
-import { GeneralStatus, PaymentHistoryTable, NextPaymentCard, ReminderAlert, PaymentModal } from './blocks';
+import { GeneralStatus, PaymentHistoryTable, NextPaymentCard, ReminderAlert } from './blocks';
 import { useFinancialAccount } from './hooks';
 
 const FinancialAccountOverviewPage = () => {
   const { data, isLoading, error } = useFinancialAccount();
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const handleDownloadStatement = () => {
     // TODO: Implementar descarga de estado
@@ -15,12 +13,8 @@ const FinancialAccountOverviewPage = () => {
   };
 
   const handleMakePayment = () => {
-    setIsPaymentModalOpen(true);
-  };
-
-  const handlePaymentSuccess = () => {
-    setIsPaymentModalOpen(false);
-    // TODO: Refrescar datos de la cuenta financiera
+    // TODO: Implementar modal/ruta de pago
+    console.log('Realizar pago...');
   };
 
   return (
@@ -32,7 +26,7 @@ const FinancialAccountOverviewPage = () => {
         />
         <ToolbarActions>
           <Button onClick={handleDownloadStatement} className="gap-2" variant="outline">
-            <KeenIcon icon="file-down" />
+            <KeenIcon iconName="file-down" />
             Descargar Estado
           </Button>
           <Button
@@ -53,7 +47,7 @@ const FinancialAccountOverviewPage = () => {
         ) : error ? (
           <div className="card bg-red-50 border border-red-200">
             <div className="card-body flex items-center gap-3">
-              <KeenIcon icon="information-circle" className="text-red-600 text-xl" />
+              <KeenIcon iconName="information-circle" className="text-red-600 text-xl" />
               <div>
                 <h4 className="font-semibold text-red-900">Error al cargar</h4>
                 <p className="text-sm text-red-700">{error}</p>
@@ -75,17 +69,6 @@ const FinancialAccountOverviewPage = () => {
           </>
         ) : null}
       </div>
-
-      {/* Payment Modal */}
-      {data && (
-        <PaymentModal
-          isOpen={isPaymentModalOpen}
-          amount={data.overview.saldo_pendiente}
-          concept="Matrícula Trimestral"
-          onClose={() => setIsPaymentModalOpen(false)}
-          onSuccess={handlePaymentSuccess}
-        />
-      )}
     </Container>
   );
 };
