@@ -65,6 +65,7 @@ import {
 import { ProfileDetailsPage } from '@/pages/profile/pages';
 import { ChangePasswordPage } from '@/pages/profile/pages';
 import { FinancialAccountOverviewPage } from '@/pages/financial-account/pages/financial-account-overview/financial-account-overview.component';
+import { PaymentPage } from '@/pages/financial-account/pages/payment/payment.page';
 import { SubjectPreselectionPage, SubjectSelectionPage } from '@/pages/processes/pages';
 import { AcademicSchedulePage, QualificationPage } from '@/pages/revision/pages';
 import { CareerCurriculumPage } from '@/pages/academic-record/pages/career-curriculum';
@@ -89,6 +90,7 @@ const AppRoutingSetup = (): ReactElement => {
           {/* Financial Account Pages */}
 
           <Route path="/financial-account/overview" element={<FinancialAccountOverviewPage />} />
+          <Route path="/financial-account/payment" element={<PaymentPage amount={0} concept="" />} />
 
           {/* Processes Pages */}
 
