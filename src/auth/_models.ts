@@ -4,10 +4,15 @@ export interface AuthModel {
   access_token: string;
   refreshToken?: string;
   api_token: string;
+  // Campos adicionales del endpoint INTEC
+  nombreUsuario?: string;
+  rol?: string;
+  usuarioId?: string; // Sub del JWT
+  cambioClaveSolicitado?: boolean;
 }
 
 export interface UserModel {
-  id: number;
+  id: number | string;
   username: string;
   password: string | undefined;
   email: string;
@@ -17,8 +22,20 @@ export interface UserModel {
   occupation?: string;
   companyName?: string;
   phone?: string;
-  roles?: number[];
+  roles?: number[] | string[];
+  // Campos adicionales del endpoint INTEC
+  nombreUsuario?: string;
+  rol?: string;
+  usuarioId?: string;
+  cambioClaveSolicitado?: boolean;
   pic?: string;
   language?: TLanguageCode;
   auth?: AuthModel;
+}
+
+export interface studne {
+  idUsuario: number;
+  nombre: string;
+  apellido: string;
+  nombreProgramaAcademico: string;
 }
