@@ -90,7 +90,7 @@ export const PaymentHistoryTable = ({ data }: PaymentHistoryProps) => {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
             <KeenIcon
-              iconName="search"
+              icon="search"
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <input
@@ -106,7 +106,7 @@ export const PaymentHistoryTable = ({ data }: PaymentHistoryProps) => {
 
           <div className="relative">
             <KeenIcon
-              iconName="filter"
+              icon="filter"
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <select
@@ -123,7 +123,7 @@ export const PaymentHistoryTable = ({ data }: PaymentHistoryProps) => {
               <option value="CANCELADO">Cancelado</option>
             </select>
             <KeenIcon
-              iconName="chevron-down"
+              icon="chevron-down"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
             />
           </div>
@@ -201,7 +201,7 @@ export const PaymentHistoryTable = ({ data }: PaymentHistoryProps) => {
                 disabled={safeCurrentPage === 1}
                 className="px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
               >
-                <KeenIcon iconName="chevron-left" />
+                <KeenIcon icon="chevron-left" />
               </button>
 
               {pageNumbers.map((num, idx) =>
@@ -229,7 +229,7 @@ export const PaymentHistoryTable = ({ data }: PaymentHistoryProps) => {
                 disabled={safeCurrentPage === totalPages}
                 className="px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
               >
-                <KeenIcon iconName="chevron-right" />
+                <KeenIcon icon="chevron-right" />
               </button>
             </div>
           </div>
