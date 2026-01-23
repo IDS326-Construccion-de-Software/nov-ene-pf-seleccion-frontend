@@ -76,12 +76,8 @@ export const login = async (
     );
     return data;
   } catch (error: any) {
-    const message =
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      error.message ||
-      'Error al iniciar sesión';
-    throw new Error(message);
+    // Re-lanzar el error original para que JWTProvider pueda manejar el 403
+    throw error;
   }
 };
 
@@ -147,10 +143,50 @@ export const getMe = async (token: string): Promise<UserMeResponse> => {
   }
 };
 
+export interface ChangePasswordRequest {
+  contraseñaActual: string;
+  contraseñaNueva: string;
+  confirmarContraseña: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+/**
+ * Cambia la contraseña del usuario autenticado
+ */
+export const changePassword = async (
+  token: string,
+  payload: ChangePasswordRequest
+): Promise<ChangePasswordResponse> => {
+  try {
+    const { data } = await axios.post<ChangePasswordResponse>(
+      `${API_URL}/auth/change-password`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'Error al cambiar la contraseña';
+    throw new Error(message);
+  }
+};
+
 export default {
   login,
   refreshToken,
   logout,
   getMe,
+  changePassword,
   decodeJWT
 };

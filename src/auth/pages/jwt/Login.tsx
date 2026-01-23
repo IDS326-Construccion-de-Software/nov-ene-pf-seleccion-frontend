@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { KeenIcon } from '@/components';
-import { useAuthContext } from '@/auth';
+import { useAuthContext, PasswordChangeRequiredError } from '@/auth';
 import { useLayout } from '@/providers';
 import { Alert } from '@/components';
 import { emailValidation, passwordValidation, toAbsoluteUrl } from '@/utils';
@@ -59,6 +59,16 @@ const Login = () => {
 
         navigate(from, { replace: true });
       } catch (error: any) {
+        // Verificar si es PasswordChangeRequiredError (por instanceof o por propiedad)
+        if (error instanceof PasswordChangeRequiredError || error?.isPasswordChangeRequired) {
+          // Redirigir automáticamente a cambiar-password
+          const changePasswordPath = currentLayout?.name === 'auth-branded' 
+            ? '/auth/cambiar-password' 
+            : '/auth/classic/cambiar-password';
+          navigate(changePasswordPath, { replace: true });
+          return;
+        }
+
         const errorMessage = error?.message || 'Los datos de inicio de sesión son incorrectos';
         setStatus(errorMessage);
         setSubmitting(false);

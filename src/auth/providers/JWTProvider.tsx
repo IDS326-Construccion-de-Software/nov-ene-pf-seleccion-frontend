@@ -8,6 +8,7 @@ import {
   useEffect,
   useState
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import * as authHelper from '../_helpers';
 import { type AuthModel, type UserModel } from '@/auth';
@@ -19,6 +20,16 @@ export const REGISTER_URL = `${API_URL}/api/auth/register`;
 export const FORGOT_PASSWORD_URL = `${API_URL}/api/auth/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/api/auth/reset-password`;
 export const GET_USER_URL = `${API_URL}/api/auth/user`;
+
+export class PasswordChangeRequiredError extends Error {
+  public readonly isPasswordChangeRequired = true;
+  
+  constructor(public code: string = 'PASSWORD_CHANGE_REQUIRED') {
+    super('Se requiere cambio de contraseña');
+    this.name = 'PasswordChangeRequiredError';
+    Object.setPrototypeOf(this, PasswordChangeRequiredError.prototype);
+  }
+}
 
 interface AuthContextProps {
   loading: boolean;
@@ -119,8 +130,35 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       setCurrentUser(user);
       axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.accessToken}`;
     } catch (error: any) {
+      // Verificar primero si es error 403 con PASSWORD_CHANGE_REQUIRED
+      if (error.response?.status === 403) {
+        const code = 
+          error.response?.data?.code || 
+          error.response?.data?.error ||
+          error.response?.data?.errorCode ||
+          error.response?.statusText ||
+          '';
+        
+        // Verificar si contiene alguna variación de PASSWORD_CHANGE_REQUIRED
+        const isPasswordChangeRequired = 
+          code === 'PASSWORD_CHANGE_REQUIRED' || 
+          code?.toUpperCase() === 'PASSWORD_CHANGE_REQUIRED' ||
+          code?.toLowerCase().includes('cambio de contraseña') ||
+          code?.toLowerCase().includes('cambiar contraseña') ||
+          code?.toLowerCase().includes('password') && code?.toLowerCase().includes('change');
+        
+        if (isPasswordChangeRequired) {
+          // Guardar las credenciales temporalmente para uso en cambio de contraseña
+          localStorage.setItem('tempEmail', email);
+          localStorage.setItem('tempPassword', password);
+          throw new PasswordChangeRequiredError();
+        }
+      }
+
+      // Para otros errores, limpiar la sesión
       saveAuth(undefined);
       setCurrentUser(undefined);
+
       throw error;
     }
   };
