@@ -11,22 +11,22 @@ const StudentProfileContent = () => {
       {/* Profile Information Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
             Perfil de usuario
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-base text-gray-600 dark:text-gray-400">
             Información de estudiante
           </p>
         </div>
         
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-500 flex items-center gap-2">
-            <KeenIcon icon="calendar" className="text-base" />
+        <div className="flex items-center gap-4">
+          <span className="text-base text-gray-500 flex items-center gap-2">
+            <KeenIcon icon="calendar" className="text-lg" />
             Nov 06, 2025 - Ene 31, 2026
           </span>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary btn-lg">
             <span className="flex items-center gap-2">
-              <KeenIcon icon="medal-star" className="text-base" />
+              <KeenIcon icon="medal-star" className="text-lg" />
               Solicitar graduación
             </span>
           </button>
