@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/table';
 import { AsignaturaOferta, SeccionOferta } from '@/interfaces/selection/selection.interfaces';
 import { saveSelection, cancelSelection } from '@/services/selection/selection.service';
+import { formatTime } from '@/utils/timeFormat';
+import { useAuthContext } from '@/auth';
 import {
   Dialog,
   DialogContent,
@@ -46,9 +48,10 @@ const SubjectSelectionTable = ({
   onItemsPerPageChange
 }: SubjectSelectionTableProps) => {
   const queryClient = useQueryClient();
-  // const { currentUser } = useAuthContext();
-  const currentUser = { id: 2 };
+  const { auth } = useAuthContext();
+  const usuarioId = String(auth?.usuarioId);
   const [expandedSubjects, setExpandedSubjects] = useState<string[]>([]);
+
   const [sectionToCancel, setSectionToCancel] = useState<{
     id: number;
     name: string;
@@ -58,7 +61,7 @@ const SubjectSelectionTable = ({
   const mutation = useMutation(
     (seccionId: number) =>
       saveSelection({
-        usuarioId: String(currentUser?.id),
+        usuarioId,
         seccionId
       }),
     {
@@ -80,7 +83,7 @@ const SubjectSelectionTable = ({
   );
 
   const cancelMutation = useMutation(
-    (seleccionId: number) => cancelSelection(seleccionId, String(currentUser?.id)),
+    (seleccionId: number) => cancelSelection(seleccionId, usuarioId),
     {
       onSuccess: (data) => {
         if (data.success) {
@@ -208,7 +211,7 @@ const SubjectSelectionTable = ({
         disabled={mutation.isLoading}
       >
         {mutation.isLoading && mutation.variables === seccion.seccionId ? (
-          <span className="animate-spin size-4 border-2 border-green-600 border-t-transparent rounded-full"></span>
+          <span className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></span>
         ) : (
           <KeenIcon icon="plus" />
         )}
@@ -220,7 +223,6 @@ const SubjectSelectionTable = ({
     <div className="flex flex-col gap-4">
       <h2 className="text-lg font-bold text-gray-900">Asignaturas disponibles</h2>
 
-      {/* Desktop View (Table) */}
       <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
         <Table>
           <TableHeader className="bg-gray">
@@ -284,9 +286,9 @@ const SubjectSelectionTable = ({
                                 variant="outline"
                                 className="bg-red-50 text-red-500 border-gray-300 rounded px-2 font-bold"
                               >
-                              <KeenIcon icon="lock" className="mb-0.5" />
+                                <KeenIcon icon="lock" className="mb-0.5" />
                               </Badge>
-                              <span className="text-bold text-gray-700"> PRE-REQUISITOS | </span>
+                              <span className="text-bold text-gray-700"> BLOQUEADA | </span>
                               <span className="text-red-500">{subject.motivoBloqueo}</span>
                             </span>
                           )}
@@ -397,7 +399,7 @@ const SubjectSelectionTable = ({
                                 <div key={i} className="text-[12px] flex gap-2">
                                   <span className="font-bold text-gray-900 w-16">{sch.dia}</span>
                                   <span className="text-gray-800 text-nowrap">
-                                    {sch.horaInicio} - {sch.horaFin}
+                                    {formatTime(sch.horaInicio)} - {formatTime(sch.horaFin)}
                                   </span>
                                 </div>
                               ))}
@@ -439,7 +441,7 @@ const SubjectSelectionTable = ({
 
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-5">
-                          {subject.procesada && (
+                          {subject.definitiva && (
                             <div className="size-8 rounded-full bg-green-100 flex items-center justify-center">
                               <KeenIcon icon="check" className="text-green-600 text-lg" />
                             </div>
@@ -480,10 +482,13 @@ const SubjectSelectionTable = ({
                                   {section.estatusValidacion.detalleAsignatura &&
                                     ` (${section.estatusValidacion.detalleAsignatura})`}
                                 </span>
-                                <span className="text-gray-600 font-bold">
-                                  {section.estatusValidacion.horaInicio} -
-                                  {section.estatusValidacion.horaFin}
-                                </span>
+                                {section.estatusValidacion.horaInicio &&
+                                  section.estatusValidacion.horaFin && (
+                                    <span className="text-gray-600 font-bold">
+                                      {formatTime(section.estatusValidacion.horaInicio)} -{' '}
+                                      {formatTime(section.estatusValidacion.horaFin)}
+                                    </span>
+                                  )}
                               </span>
                             ) : section.cupoDisponible <= 0 ? (
                               <Badge
@@ -540,7 +545,10 @@ const SubjectSelectionTable = ({
                                     <span
                                       className={cn(
                                         'font-bold text-[12px]',
-                                        getCapacityTextColor(section.cupoDisponible, section.cupoTotal)
+                                        getCapacityTextColor(
+                                          section.cupoDisponible,
+                                          section.cupoTotal
+                                        )
                                       )}
                                     >
                                       / {section.cupoDisponible} Disp.
@@ -589,9 +597,11 @@ const SubjectSelectionTable = ({
                                 <div className="flex flex-col gap-1">
                                   {section.horarios.map((sch, i) => (
                                     <div key={i} className="text-[12px] flex gap-2">
-                                      <span className="font-bold text-gray-900 w-16">{sch.dia}</span>
+                                      <span className="font-bold text-gray-900 w-16">
+                                        {sch.dia}
+                                      </span>
                                       <span className="text-gray-800 text-nowrap">
-                                        {sch.horaInicio} - {sch.horaFin}
+                                        {formatTime(sch.horaInicio)} - {formatTime(sch.horaFin)}
                                       </span>
                                     </div>
                                   ))}
@@ -647,7 +657,7 @@ const SubjectSelectionTable = ({
               disabled={cancelMutation.isLoading}
             >
               {cancelMutation.isLoading ? (
-                <span className="animate-spin size-4 border-2 border-white border-t-transparent rounded-full"></span>
+                <span className="animate-spin size-4 border-2 border-white border-t-transparent rounded-fulanimate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></span>
               ) : (
                 'Sí, quitar'
               )}

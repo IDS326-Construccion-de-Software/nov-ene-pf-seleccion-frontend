@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Container, KeenIcon } from '@/components';
 import { Toolbar, ToolbarHeading, ToolbarActions } from '@/layouts/applayout/toolbar';
@@ -20,9 +20,11 @@ import {
 import { useOfertaSeleccion, useResumenSeleccion } from './hooks/useOfertaSeleccion';
 import { getFase } from '@/services/periodoconfig/peridoconfig.service';
 import { finalizarSeleccion } from '@/services/selection/selection.service';
+import { useAuthContext } from '@/auth';
 
 const SubjectSelectionPage = () => {
-  const { usuarioId = '2' } = useParams<{ usuarioId: string }>();
+  const { auth } = useAuthContext();
+  const usuarioId = String(auth?.usuarioId);
   const navigate = useNavigate();
   const [filters, setFilters] = useState<any>({});
   const [showFaseDialog, setShowFaseDialog] = useState(false);
@@ -106,6 +108,7 @@ const SubjectSelectionPage = () => {
   }
 
   const oferta = data?.oferta || [];
+  // Obtener todas las asignaturas del resumen (tanto pendientes como definitivas)
   const resumen = resumenData?.resumen || [];
 
   const resCarga = {

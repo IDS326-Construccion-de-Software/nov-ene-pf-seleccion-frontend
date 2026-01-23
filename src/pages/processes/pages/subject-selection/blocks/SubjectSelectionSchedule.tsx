@@ -10,6 +10,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { AsignaturaOferta } from '@/interfaces/selection/selection.interfaces';
+import { formatTime } from '@/utils/timeFormat';
 
 interface SubjectSelectionScheduleProps {
   oferta: AsignaturaOferta[];
@@ -21,14 +22,14 @@ const SubjectSelectionSchedule = ({ oferta }: SubjectSelectionScheduleProps) => 
       ...sec,
       asignaturaId: subj.asignaturaId,
       asignatura: subj.asignatura,
-      procesada: subj.procesada
+      definitiva: subj.definitiva
     }))
   );
 
   const getHorarioDia = (horarios: any[], dia: string) => {
     const h = horarios.find((x) => x.dia === dia);
     if (!h) return null;
-    return `${h.horaInicio} - ${h.horaFin}`;
+    return `${formatTime(h.horaInicio)} - ${formatTime(h.horaFin)}`;
   };
 
   return (
@@ -125,7 +126,7 @@ const SubjectSelectionSchedule = ({ oferta }: SubjectSelectionScheduleProps) => 
                         </Badge>
                       )}
                     </TableCell>
-                 
+
                     <TableCell className="text-center">
                       <Badge
                         variant="outline"
@@ -138,12 +139,12 @@ const SubjectSelectionSchedule = ({ oferta }: SubjectSelectionScheduleProps) => 
                       {sec.profesor}
                     </TableCell>
                     <TableCell className="flex justify-center items-center ">
-                      {sec.procesada && (
+                      {sec.definitiva && (
                         <div className="size-8 rounded-full bg-green-100 flex items-center justify-center">
                           <KeenIcon icon="check" className="text-green-600 text-lg" />
                         </div>
                       )}
-                      {!sec.procesada && (
+                      {!sec.definitiva && (
                         <Badge
                           variant="outline"
                           className="bg-amber-50 text-amber-500 border-amber-300 text-[10px] font-bold rounded-md"

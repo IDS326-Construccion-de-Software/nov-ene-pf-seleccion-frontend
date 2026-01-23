@@ -20,7 +20,7 @@ const AppLayoutLightSidebarPage = () => {
 
   return (
     <Fragment>
-      <Container>
+      <Container width="fluid">
         <EmblaCarousel
           slides={[
             toAbsoluteUrl('/media/emblaCarrusel/banner-web-rector-2025-v3-e70fc06d.webp'),
@@ -29,6 +29,9 @@ const AppLayoutLightSidebarPage = () => {
           ]}
           options={{ loop: true }}
         />
+      </Container>
+
+      <Container width="fluid">
         <Toolbar>
           <ToolbarHeading title="Dashboard" description="Cuadro de mando integral académico" />
           <ToolbarActions>
@@ -70,7 +73,7 @@ const AppLayoutLightSidebarPage = () => {
         </Toolbar>
       </Container>
 
-      <Container>
+      <Container width="fluid">
         <AppLayoutLightSidebarContent />
       </Container>
     </Fragment>

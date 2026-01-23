@@ -11,7 +11,6 @@ import { useLanguage } from '@/i18n';
 const HeaderTopbar = () => {
   const { isRTL } = useLanguage();
   const itemChatRef = useRef<any>(null);
-  const itemAppsRef = useRef<any>(null);
   const itemUserRef = useRef<any>(null);
   const itemNotificationsRef = useRef<any>(null);
 
@@ -105,11 +104,11 @@ const HeaderTopbar = () => {
           <MenuToggle className="btn btn-icon rounded-full">
             <img
               className="size-9 rounded-full border-2 border-primary shrink-0"
-              src={toAbsoluteUrl('/media/avatars/300-2.png')}
+              src={toAbsoluteUrl('/media/avatars/blank.png')}
               alt=""
             />
           </MenuToggle>
-          {DropdownUser({ menuItemRef: itemUserRef })}
+          {DropdownUser()}
         </MenuItem>
       </Menu>
     </div>

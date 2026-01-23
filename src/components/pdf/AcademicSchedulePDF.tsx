@@ -1,360 +1,520 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import { toAbsoluteUrl } from '@/utils/Assets';
+import { StudentData } from '@/interfaces/user';
+import { ColumnWidths, ScheduleData } from '@/interfaces/documents';
 
-// Datos de muestra del horario académico
-const scheduleData = [
-  {
-    seccion: "ADM315-01",
-    asignatura: "ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL",
-    creditos: 4,
-    profesor: "MARCOS SÁNCHEZ MARTÍNEZ", 
-    aula: "GC314",         
-    lunes: "9/11",
-    martes: "",
-    miercoles: "9/11",
-    jueves: "",
-    viernes: "",
-    sabado: "" 
-  },
-  {
-    seccion: "ICS320-02",
-    asignatura: "FUNDAMENTOS DE CIBERSEGURIDAD",
-    creditos: 2,
-    profesor: "BUENAVENTURA MATOS VEGA",
-    aula: "AJ404",      
-    lunes: "",
-    martes: "14/16",
-    miercoles: "",
-    jueves: "",
-    viernes: "",
-    sabado: "" 
-  },
-  {
-    seccion: "IDS339-02",
-    asignatura: "DEVOPS Y DEVSECOPS",
-    creditos: 3,
-    profesor: "MATEO LLUBERES VALDEZ",
-    aula: "FD411",      
-    lunes: "",
-    martes: "",
-    miercoles: "11/13",
-    jueves: "",
-    viernes: "11/12",
-    sabado: "",
-  },
-  {
-    seccion: "IDS352-01",
-    asignatura: "ANTEPROYECTO DE GRADO",
-    creditos: 4,
-    profesor: "FRANCIA DE LOS SANTOS ROSARIO",
-    aula: "FD411",      
-    lunes: "",
-    martes: "",
-    miercoles: "",
-    jueves: "9/13",
-    viernes: "",
-    sabado: "",
-  },
-  {
-    seccion: "IDS353-01",
-    asignatura: "PASANTÍA PROFESIONAL I",
-    creditos: 2,
-    profesor: "MARÍA ELENA PORTILLA VENEGAS",
-    aula: "FD405",      
-    lunes: "",
-    martes: "",
-    miercoles: "",
-    jueves: "",
-    viernes: "18/20",
-    sabado: "",
-  },
-  {
-    seccion: "IDS354-01",
-    asignatura: "GESTIÓN DE LA INGENIERÍA DE SOFTWARE",
-    creditos: 3,
-    profesor: "JOSÉ ANTONIO MÁRQUEZ VALENTE",
-    aula: "VIRTU",      
-    lunes: "",
-    martes: "",
-    miercoles: "",
-    jueves: "",
-    viernes: "",
-    sabado: "8/11",
-  }
-];
+const LOGO_SUPERIOR = toAbsoluteUrl('/media/print-document/logo-superior.png');
+const LOGO_PIE_PAGINA = toAbsoluteUrl('/media/print-document/Logo-Inferior.png');
+const IMAGEN_FORJANDO_FUTURO = toAbsoluteUrl(
+  '/media/print-document/imagen-forjando-futuro-hoy.png'
+);
 
-// Estilos para el PDF
+const defaultColumnWidths: ColumnWidths = {
+  seccion: '9%',
+  asignatura: '23%',
+  creditos: '5%',
+  profesor: '18%',
+  aula: '10%',
+  lunes: '8%',
+  martes: '8%',
+  miercoles: '8%',
+  jueves: '8%',
+  viernes: '8%',
+  sabado: '8%'
+};
+
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: '#FFFFFF',
-    padding: 30,
+    padding: 40,
     fontSize: 10,
     fontFamily: 'Helvetica',
+    position: 'relative'
   },
-  header: {
-    marginBottom: 20,
-    borderBottom: '2 solid black',
-    paddingBottom: 10,
+  redBar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 20,
+    backgroundColor: '#C41E3A'
   },
-  institutionName: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  headerInfo: {
+  headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 3,
+    alignItems: 'flex-start',
+    marginBottom: 20
   },
-  headerTextBold: {
-    fontWeight: 'bold',
-    fontSize: 10,
-  },
-  studentInfo: {
-    marginBottom: 15,
-    borderBottom: '1 solid black',
-    paddingBottom: 10,
-  },
-  infoRow: {
+  metaInfo: {
     flexDirection: 'row',
-    marginBottom: 3,
+    justifyContent: 'flex-end',
+    marginBottom: 20,
+    fontSize: 9,
+    color: '#666666'
   },
-  label: {
+  metaColumn: {
+    flexDirection: 'column',
+    textAlign: 'right',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  },
+  logoSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 0
+  },
+  logo: {
+    width: 75,
+    height: 48
+  },
+  intecBadge: {
+    width: 160,
+    height: 48
+  },
+  headerSection: {
+    marginBottom: 20,
+    borderBottom: '3 solid #E5E7EB',
+    paddingBottom: 15
+  },
+  headerLabel: {
+    fontSize: 11,
+    color: '#6B7280',
+    letterSpacing: 1,
+    marginBottom: 5,
+    textTransform: 'uppercase'
+  },
+  headerTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    width: 80,
+    color: '#111827'
   },
-  value: {
-    flex: 1,
+  headerTitleRed: {
+    color: '#C41E3A'
+  },
+  trimesterBadge: {
+    backgroundColor: '#374151',
+    color: '#FFFFFF',
+    padding: 8,
+    borderRadius: 4,
+    fontSize: 10,
+    alignSelf: 'flex-start'
+  },
+  studentSection: {
+    backgroundColor: '#FFFFFF',
+    borderLeft: '2 solid #C41E3A',
+    padding: 4
+  },
+  studentRow: {
+    flexDirection: 'row'
+  },
+  studentLabel: {
+    fontSize: 10,
+    color: '#6B7280',
+    width: 70,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5
+  },
+  studentValue: {
+    fontSize: 11,
+    color: '#111827',
+    fontWeight: 'bold',
+    flex: 1
   },
   table: {
     marginTop: 10,
+    marginBottom: 20,
+    borderTop: '1 solid #000000',
+    borderLeft: '1 solid #000000'
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
-    borderTop: '1 solid black',
-    borderLeft: '1 solid black',
-    borderRight: '1 solid black',
-    borderBottom: '1 solid black',
-    paddingVertical: 5,
-    paddingHorizontal: 2,
+    backgroundColor: '#1F2937',
+    color: '#FFFFFF',
+    borderBottom: '1 solid #000000',
+    borderRight: '1 solid #000000',
+    alignItems: 'center'
   },
   tableRow: {
     flexDirection: 'row',
-    //borderLeft: '1 solid black',
-    //borderRight: '1 solid black',
-    //borderBottom: '1 solid black',
-    paddingVertical: 8,
-    paddingHorizontal: 2,
-    minHeight: 35,
-    alignItems: 'center',
+    borderBottom: '1 solid #000000',
+    borderRight: '1 solid #000000',
+    minHeight: 25
   },
-  col1: { width: '10%', paddingRight: 6, paddingLeft: 6 }, // Sección
-  col2: { width: '23%', paddingRight: 4, paddingLeft: 6 }, // Asignatura
-  col3: { width: '4%',  paddingRight: 8, paddingLeft: 6 }, // CR
-  col4: { width: '20%', paddingRight: 6, paddingLeft: 8 }, // Profesor
-  col5: { width: '8%', paddingRight: 6, paddingLeft: 4 }, // Aula  
-  col6: { width: '6%',  paddingRight: 6, paddingLeft: 6 }, // Lunes
-  col7: { width: '6%',  paddingRight: 6, paddingLeft: 6 }, // Martes
-  col8: { width: '6%',  paddingRight: 6, paddingLeft: 6 }, // Miércoles
-  col9: { width: '6%',  paddingRight: 6, paddingLeft: 6 }, // Jueves
-  col10: { width: '5%', paddingRight: 6, paddingLeft: 6 }, // Viernes
-  col11: { width: '4%', paddingRight: 6, paddingLeft: 6 }, // Sábado
-  
-  headerText: {
+  headerCell: {
     fontWeight: 'bold',
-    fontSize: 9,
-    textAlign: 'left',
+    fontSize: 7,
+    color: '#FFFFFF',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    borderRight: '1 solid #000000',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
   },
   cellText: {
     fontSize: 8,
-    textAlign: 'center',
-    lineHeight: 1.2,
+    color: '#374151',
+    borderRight: '1 solid #000000',
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
   },
-  cellTextLeft: {
-    fontSize: 8,
-    textAlign: 'left',
-    lineHeight: 1.2,
-  },
-  /*cellTextSmall: {
+  cellTime: {
     fontSize: 7,
-    textAlign: 'left',
-    lineHeight: 1.1,
-  },*/
-  footer: {
-    marginTop: 20,
+    color: '#C41E3A',
+    fontWeight: 'bold',
+    borderRight: '1 solid #000000',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
+  },
+  cellTextLast: {
+    fontSize: 8,
+    color: '#374151',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
+  },
+  cellTimeLast: {
+    fontSize: 7,
+    color: '#C41E3A',
+    fontWeight: 'bold',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
+  },
+  textBold: {
+    fontFamily: 'Helvetica-Bold'
+  },
+  summaryContainer: {
+    marginBottom: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 20
   },
-  footerSection: {
-    flex: 1,
+  summaryBox: {
+    backgroundColor: '#FFFFFF',
+    padding: 18,
+    borderRadius: 8,
+    border: '1 solid #E5E7EB'
   },
-  footerLabel: {
+  summaryLeft: {
+    flex: 1
+  },
+  summaryItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8
+  },
+  summaryLabel: {
+    fontSize: 10,
+    color: '#6B7280'
+  },
+  summaryValue: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    color: '#111827'
   },
-  observations: {
-    marginTop: 50,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#000000',
+  summaryValueRed: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#C41E3A'
+  },
+  summaryRight: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 10
+  },
+  cargaLabel: {
+    fontSize: 10,
+    color: '#9CA3AF',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    textAlign: 'center'
+  },
+  cargaValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center'
+  },
+  cargaValue: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#C41E3A',
+    lineHeight: 1
+  },
+  cargaUnit: {
+    fontSize: 16,
+    color: '#9CA3AF',
+    marginLeft: 4
+  },
+  observationsSection: {
+    flexDirection: 'row',
     position: 'absolute',
-    bottom: 30,
-    left: 30,
-    right: 30,
+    bottom: 40,
+    left: 40,
+    right: 40,
+    paddingTop: 20,
+    borderTop: '2 solid #F3F4F6'
+  },
+  observationsIcon: {
+    width: 60,
+    height: 60,
+    marginRight: 15
+  },
+  observationsContent: {
+    flex: 1
   },
   observationsTitle: {
+    fontSize: 11,
     fontWeight: 'bold',
-    fontSize: 10,
-    marginBottom: 5,
+    color: '#C41E3A',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 8
   },
   observationsText: {
     fontSize: 9,
-    lineHeight: 1.3,
+    color: '#4B5563',
     textAlign: 'justify',
+    lineHeight: 1.5
+  },
+  sectionSchedule: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 });
 
-interface ScheduleData {
-  seccion: string;
-  asignatura: string;
-  creditos: number; 
-  profesor: string; 
-  aula: string;  
-  lunes: string;
-  martes: string;
-  miercoles: string;
-  jueves: string;
-  viernes: string;
-  sabado: string;
-}
-
 interface AcademicSchedulePDFProps {
-  studentData?: {
-    id: string;
-    name: string;
-    program: string;
-    trimester: string;
-  };
+  studentData?: StudentData;
   scheduleData?: ScheduleData[];
+  scheduleType?: 'Preseleccion' | 'Seleccion';
+  trimester?: string;
+  customWidths?: Partial<ColumnWidths>;
 }
 
-const AcademicSchedulePDF: React.FC<AcademicSchedulePDFProps> = ({ 
-  studentData = {
-    id: "1077546",
-    name: "ISMAEL MARTÍNEZ",
-    program: "(IDS 2020) INGENIERÍA DE SOFTWARE (IDS)",
-    trimester: "Noviembre 2025 - Enero 2026"
-  }, 
-  scheduleData: propScheduleData = scheduleData 
-}) => {    
-  const currentDate = new Date().toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: '2-digit', 
-    day: '2-digit'
+const AcademicSchedulePDF: React.FC<AcademicSchedulePDFProps> = ({
+  studentData,
+  scheduleData: propScheduleData = [],
+  scheduleType = 'Preseleccion',
+  trimester = 'Periodo no disponible',
+  customWidths = {}
+}) => {
+  const widths = { ...defaultColumnWidths, ...customWidths };
+
+  const currentDate = new Date().toLocaleDateString('es-DO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
   });
 
-  const currentTime = new Date().toLocaleTimeString('es-ES', {
+  const currentTime = new Date().toLocaleTimeString('es-DO', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    hour12: true
   });
 
   const totalCredits = propScheduleData.reduce((sum, course) => sum + course.creditos, 0);
-  const theorySubjects = propScheduleData.filter(course => !course.asignatura.toLowerCase().includes('laboratorio')).length;
-  const labSubjects = propScheduleData.filter(course => course.asignatura.toLowerCase().includes('laboratorio')).length;
+  const theorySubjects = propScheduleData.filter(
+    (course) => !course.asignatura.toLowerCase().includes('laboratorio')
+  ).length;
+  const labSubjects = propScheduleData.filter((course) =>
+    course.asignatura.toLowerCase().includes('laboratorio')
+  ).length;
 
   return (
     <Document>
       <Page size="A4" orientation="portrait" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.institutionName}>Instituto Tecnológico de Santo Domingo</Text>
-          <View style={styles.headerInfo}>
-            <Text>Dirección de Registro</Text>
-            <Text>
-              <Text style={styles.headerTextBold}>Fecha de Impresión: </Text>
-              <Text>{currentDate} {currentTime}</Text>
-            </Text>
-          </View>
-          <View style={styles.headerInfo}>
-            <Text>Volante de selección</Text>
-            <Text>
-              <Text style={styles.headerTextBold}>Página: </Text>
-              <Text>1 de 1</Text>
-            </Text>
-          </View>
-          <Text>
-            <Text>Trimestre: </Text>
-            <Text style={styles.headerTextBold}>{studentData.trimester}</Text>
-          </Text>
-        </View>
+        <View style={styles.redBar} />
 
-        {/* Student Information */}
-        <View style={styles.studentInfo}>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Estudiante</Text>
-            <Text style={styles.value}>: ({studentData.id}) {studentData.name}</Text>
+        <View style={styles.headerContainer}>
+          <View style={styles.logoSection}>
+            <Image src={LOGO_SUPERIOR} style={styles.logo} />
+            <Image src={IMAGEN_FORJANDO_FUTURO} style={styles.intecBadge} />
           </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Programa</Text>
-            <Text style={styles.value}>: {studentData.program}</Text>
+          <View style={styles.metaInfo}>
+            <View style={styles.metaColumn}>
+              <Text>Fecha de Impresión:</Text>
+              <Text>
+                {currentDate} {currentTime}
+              </Text>
+            </View>
           </View>
         </View>
 
-        {/* Table */}
+        <View style={styles.headerSection}>
+          <Text style={styles.headerLabel}>DIRECCIÓN DE REGISTRO</Text>
+          <View style={styles.sectionSchedule}>
+            <Text style={styles.headerTitle}>
+              <Text style={styles.headerTitleRed}>Horario</Text>
+              <Text> - {scheduleType === 'Preseleccion' ? 'Preselección' : 'Selección'}</Text>
+            </Text>
+            <View style={styles.trimesterBadge}>
+              <Text>{trimester}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.studentSection}>
+          <View style={styles.studentRow}>
+            <Text style={styles.studentLabel}>ESTUDIANTE</Text>
+            <Text style={styles.studentValue}>
+              ({studentData?.idUsuario || 'N/A'}) {studentData?.nombre || ''}{' '}
+              {studentData?.apellido || ''}
+            </Text>
+          </View>
+          <View style={styles.studentRow}>
+            <Text style={styles.studentLabel}>PROGRAMA</Text>
+            <Text style={styles.studentValue}>{studentData?.nombreProgramaAcademico || 'N/A'}</Text>
+          </View>
+        </View>
+
+        {/* Tabla con anchos dinámicos */}
         <View style={styles.table}>
-          {/* Table Header */}
           <View style={styles.tableHeader}>
-            <View style={styles.col1}><Text style={styles.headerText}>Sección</Text></View>
-            <View style={styles.col2}><Text style={styles.headerText}>Asignatura</Text></View>
-            <View style={styles.col3}><Text style={styles.headerText}>CR</Text></View>
-            <View style={styles.col4}><Text style={styles.headerText}>Profesor</Text></View>   
-            <View style={styles.col5}><Text style={styles.headerText}>Aula</Text></View>         
-            <View style={styles.col6}><Text style={styles.headerText}>Lun</Text></View>
-            <View style={styles.col7}><Text style={styles.headerText}>Mar</Text></View>
-            <View style={styles.col8}><Text style={styles.headerText}>Mie</Text></View>
-            <View style={styles.col9}><Text style={styles.headerText}>Jue</Text></View>
-            <View style={styles.col10}><Text style={styles.headerText}>Vie</Text></View>
-            <View style={styles.col11}><Text style={styles.headerText}>Sab</Text></View>            
+            <Text style={[styles.headerCell, { width: widths.seccion }]}>Sección</Text>
+            <Text style={[styles.headerCell, { width: widths.asignatura }]}>Asignatura</Text>
+            <Text style={[styles.headerCell, { width: widths.creditos }]}>Cr</Text>
+            <Text style={[styles.headerCell, { width: widths.profesor }]}>Profesor</Text>
+            <Text style={[styles.headerCell, { width: widths.aula }]}>Aula</Text>
+            <Text style={[styles.headerCell, { width: widths.lunes }]}>Lun</Text>
+            <Text style={[styles.headerCell, { width: widths.martes }]}>Mar</Text>
+            <Text style={[styles.headerCell, { width: widths.miercoles }]}>Mie</Text>
+            <Text style={[styles.headerCell, { width: widths.jueves }]}>Jue</Text>
+            <Text style={[styles.headerCell, { width: widths.viernes }]}>Vie</Text>
+            <Text style={[styles.headerCell, { width: widths.sabado }]}>Sab</Text>
           </View>
-
-          {/* Table Rows */}
           {propScheduleData.map((course, index) => (
             <View key={index} style={styles.tableRow}>
-              <View style={styles.col1}><Text style={styles.cellTextLeft}>{course.seccion}</Text></View>
-              <View style={styles.col2}><Text style={styles.cellTextLeft}>{course.asignatura}</Text></View>
-              <View style={styles.col3}><Text style={styles.cellText}>{course.creditos}</Text></View>
-              <View style={styles.col4}><Text style={styles.cellTextLeft}>{course.profesor}</Text></View>              
-              <View style={styles.col5}><Text style={styles.cellTextLeft}>{course.aula}</Text></View>
-              <View style={styles.col6}><Text style={styles.cellTextLeft}>{course.lunes}</Text></View>
-              <View style={styles.col7}><Text style={styles.cellTextLeft}>{course.martes}</Text></View>
-              <View style={styles.col8}><Text style={styles.cellTextLeft}>{course.miercoles}</Text></View>
-              <View style={styles.col9}><Text style={styles.cellTextLeft}>{course.jueves}</Text></View>
-              <View style={styles.col10}><Text style={styles.cellTextLeft}>{course.viernes}</Text></View>
-              <View style={styles.col11}><Text style={styles.cellTextLeft}>{course.sabado}</Text></View>              
+              <Text
+                style={[
+                  styles.cellText,
+                  { width: widths.seccion },
+                  { fontWeight: 'bold', color: '#C41E3A' }
+                ]}
+              >
+                {course.seccion}
+              </Text>
+              <Text style={[styles.cellText, { width: widths.asignatura }]}>
+                {course.asignatura}
+              </Text>
+              <Text style={[styles.cellText, { width: widths.creditos, fontWeight: 'bold' }]}>
+                {course.creditos}
+              </Text>
+              <Text style={[styles.cellText, { width: widths.profesor }]}>{course.profesor}</Text>
+              <Text style={[styles.cellText, { width: widths.aula }]}>{course.aula}</Text>
+              <Text
+                style={[{ width: widths.lunes }, course.lunes ? styles.cellTime : styles.cellText]}
+              >
+                {course.lunes}
+              </Text>
+              <Text
+                style={[
+                  { width: widths.martes },
+                  course.martes ? styles.cellTime : styles.cellText
+                ]}
+              >
+                {course.martes}
+              </Text>
+              <Text
+                style={[
+                  { width: widths.miercoles },
+                  course.miercoles ? styles.cellTime : styles.cellText
+                ]}
+              >
+                {course.miercoles}
+              </Text>
+              <Text
+                style={[
+                  { width: widths.jueves },
+                  course.jueves ? styles.cellTime : styles.cellText
+                ]}
+              >
+                {course.jueves}
+              </Text>
+              <Text
+                style={[
+                  { width: widths.viernes },
+                  course.viernes ? styles.cellTime : styles.cellText
+                ]}
+              >
+                {course.viernes}
+              </Text>
+              <Text
+                style={[
+                  { width: widths.sabado },
+                  course.sabado ? styles.cellTimeLast : styles.cellTextLast
+                ]}
+              >
+                {course.sabado}
+              </Text>
             </View>
           ))}
         </View>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <View style={styles.footerSection}>
-            <Text style={styles.footerLabel}>Asignaturas de Teoría: {theorySubjects}</Text>
-            <Text style={styles.footerLabel}>Asignaturas de Laboratorio: {labSubjects}</Text>
-            <Text style={styles.footerLabel}>Total de Asignaturas: {propScheduleData.length}</Text>
+        <View style={styles.summaryContainer}>
+          <View style={[styles.summaryBox, styles.summaryLeft]}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Asig. de Teoría:</Text>
+              <Text style={styles.summaryValue}>{theorySubjects}</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Asig. de Laboratorio:</Text>
+              <Text style={styles.summaryValue}>{labSubjects}</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>Asig. de Electiva:</Text>
+              <Text style={styles.summaryValue}>0</Text>
+            </View>
+            <View
+              style={[
+                styles.summaryItem,
+                { marginTop: 8, paddingTop: 8, borderTop: '1 solid #E5E7EB' }
+              ]}
+            >
+              <Text style={[styles.summaryLabel, { fontWeight: 'bold' }]}>
+                TOTAL DE ASIGNATURAS
+              </Text>
+              <Text style={styles.summaryValueRed}>{propScheduleData.length}</Text>
+            </View>
           </View>
-          <View style={styles.footerSection}>
-            <Text style={styles.footerLabel}>Total de Créditos: {totalCredits}</Text>
+          <View style={[styles.summaryBox, styles.summaryRight]}>
+            <Text style={styles.cargaLabel}>CARGA ACADÉMICA</Text>
+            <View style={styles.cargaValueContainer}>
+              <Text style={styles.cargaValue}>{totalCredits}</Text>
+              <Text style={styles.cargaUnit}>Cr</Text>
+            </View>
           </View>
         </View>
 
-        {/* Observations */}
-        <View style={styles.observations}>
-          <Text style={styles.observationsTitle}>Observaciones:</Text>
-          <Text style={styles.observationsText}>
-            Ud. esta inscrito en las asignaturas y secciones que aparecen detalladas. Si no coinciden con su selección original, repórtelo inmediatamente a la Dirección de Registro. De lo contrario, usted solo aparecerá en las listas de estas asignaturas y secciones.
-          </Text>
+        <View style={styles.observationsSection}>
+          <Image src={LOGO_PIE_PAGINA} style={styles.observationsIcon} />
+          <View style={styles.observationsContent}>
+            <Text style={styles.observationsTitle}>OBSERVACIONES IMPORTANTES</Text>
+            <Text style={styles.observationsText}>
+              Usted está inscrito en las asignaturas y secciones que aparecen detalladas. Si no
+              coinciden con su selección original, repórtelo inmediatamente a la Dirección de
+              Registro. De lo contrario, usted solo aparecerá en las listas de estas asignaturas y
+              secciones.
+            </Text>
+          </View>
         </View>
       </Page>
     </Document>

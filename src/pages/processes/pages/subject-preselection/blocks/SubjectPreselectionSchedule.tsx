@@ -10,6 +10,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { AsignaturaOferta } from '@/interfaces/preselection/preselection.interfaces';
+import { formatTime } from '@/utils/timeFormat';
 
 interface SubjectPreselectionScheduleProps {
   oferta: AsignaturaOferta[];
@@ -28,7 +29,7 @@ const SubjectPreselectionSchedule = ({ oferta }: SubjectPreselectionScheduleProp
   const getHorarioDia = (horarios: any[], dia: string) => {
     const h = horarios.find((x) => x.dia === dia);
     if (!h) return null;
-    return `${h.horaInicio} - ${h.horaFin}`;
+    return `${formatTime(h.horaInicio)} - ${formatTime(h.horaFin)}`;
   };
 
   return (
