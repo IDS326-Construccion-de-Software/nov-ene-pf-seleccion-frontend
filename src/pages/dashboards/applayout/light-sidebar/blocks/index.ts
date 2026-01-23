@@ -1,5 +1,5 @@
 export * from './ChannelStats';
-export * from './EarningsChart';
+export * from './PersonalInfo';
 export * from './EntryCallout';
 export * from './Highlights';
 export * from './TeamMeeting';

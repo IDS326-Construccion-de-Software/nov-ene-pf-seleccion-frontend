@@ -31,16 +31,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     usePrevNextButtons(emblaApi, onNavButtonClick);
 
   return (
-    <section className="max-w-6xl mx-auto mb-5">
+    <section className="w-full mb-5">
       <div className="relative overflow-hidden" ref={emblaRef}>
-        <div className="flex touch-pan-y touch-pinch-zoom -ml-4">
+        <div className="flex touch-pan-y touch-pinch-zoom">
           {slides.map((slide, idx) => (
-            <div className="flex-[0_0_100%] min-w-0 pl-4" key={idx}>
+            <div className="flex-[0_0_100%] min-w-0" key={idx}>
               {typeof slide === 'string' ? (
                 <img
                   src={slide}
                   alt={`slide-${idx}`}
-                  className="rounded-3xl object-cover w-600px h-65"
+                  className="rounded-3xl object-cover w-full h-65"
                 />
               ) : (
                 <div className="rounded-3xl text-6xl font-semibold flex items-center justify-center h-80 bg-gradient-to-br from-primary to-primary text-white shadow-lg">
@@ -56,7 +56,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             <DotButton
               key={index}
               onClick={() => onDotButtonClick(index)}
-              className={`w-5 h-5 flex items-center justify-center rounded-full border border-primary-900/30 bg-white/80 hover:bg-primary-100 transition after:content-[''] after:w-2 after:h-2 after:rounded-full after:shadow-[inset_0_0_0_0.2rem_theme(colors.primary.900)] ${
+              className={`w-5 h-5 flex items-center justify-center rounded-full border border-primary-900/30 bg-white/80 hover:bg-primary-100 transition after:content-[''] after:w-2 after:h-2 after:rounded-full after:border-2 after:border-primary-900 ${
                 index === selectedIndex ? 'after:bg-primary' : 'after:bg-primary-200'
               }`}
             />

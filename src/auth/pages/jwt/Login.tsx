@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import { type MouseEvent, useState } from 'react';
+import React, { type MouseEvent, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import * as Yup from 'yup';
@@ -16,12 +15,6 @@ const loginSchema = Yup.object().shape({
   remember: Yup.boolean()
 });
 
-const initialValues = {
-  email: 'demo@keenthemes.com',
-  password: 'demo1234',
-  remember: false
-};
-
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuthContext();
@@ -30,6 +23,17 @@ const Login = () => {
   const from = location.state?.from?.pathname || '/';
   const [showPassword, setShowPassword] = useState(false);
   const { currentLayout } = useLayout();
+
+  // Obtener credenciales guardadas al cargar el componente
+  const savedEmail = localStorage.getItem('rememberedEmail') || '';
+  const savedPassword = localStorage.getItem('rememberedPassword') || '';
+  const wasRemembered = savedEmail !== '';
+
+  const initialValues = {
+    email: savedEmail,
+    password: savedPassword,
+    remember: wasRemembered
+  };
 
   const formik = useFormik({
     initialValues,
@@ -44,24 +48,36 @@ const Login = () => {
 
         await login(values.email, values.password);
 
+        // Guardar o eliminar credenciales según la opción "Recordar"
         if (values.remember) {
-          localStorage.setItem('email', values.email);
+          localStorage.setItem('rememberedEmail', values.email);
+          localStorage.setItem('rememberedPassword', values.password);
         } else {
-          localStorage.removeItem('email');
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
         }
 
         navigate(from, { replace: true });
-      } catch {
-        setStatus('Los datos de inicio de sesión son incorrectos');
+      } catch (error: any) {
+        const errorMessage = error?.message || 'Los datos de inicio de sesión son incorrectos';
+        setStatus(errorMessage);
         setSubmitting(false);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
   });
 
   const togglePassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShowPassword(!showPassword);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !formik.isSubmitting && !loading) {
+      event.preventDefault();
+      formik.submitForm();
+    }
   };
 
   return (
@@ -114,11 +130,6 @@ const Login = () => {
           <span className="border-t border-gray-200 w-full"></span>
         </div> */}
 
-          {/* <Alert variant="primary">
-          Use <span className="font-semibold text-gray-900">demo@keenthemes.com</span> username and{' '}
-          <span className="font-semibold text-gray-900">demo1234</span> password.
-        </Alert> */}
-
           {formik.status && <Alert variant="danger">{formik.status}</Alert>}
           <div className="flex flex-col gap-1">
             <label className="form-label text-gray-900">Correo electrónico</label>
@@ -126,17 +137,18 @@ const Login = () => {
               <input
                 placeholder="Escribir correo electrónico"
                 autoComplete="off"
-                // {...formik.getFieldProps('email')}
-                // className={clsx('form-control', {
-                //   'is-invalid': formik.touched.email && formik.errors.email
-                // })}
+                {...formik.getFieldProps('email')}
+                onKeyDown={handleKeyDown}
+                className={clsx('form-control', {
+                  'is-invalid': formik.touched.email && formik.errors.email
+                })}
               />
             </label>
-            {/* {formik.touched.email && formik.errors.email && (
+            {formik.touched.email && formik.errors.email && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.email}
               </span>
-            )} */}
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between gap-1">
@@ -147,10 +159,11 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Escribir contraseña"
                 autoComplete="off"
-                // {...formik.getFieldProps('password')}
-                // className={clsx('form-control', {
-                //   'is-invalid': formik.touched.password && formik.errors.password
-                // })}
+                {...formik.getFieldProps('password')}
+                onKeyDown={handleKeyDown}
+                className={clsx('form-control', {
+                  'is-invalid': formik.touched.password && formik.errors.password
+                })}
               />
 
               <button className="btn btn-icon" onClick={togglePassword}>
@@ -161,11 +174,11 @@ const Login = () => {
                 />
               </button>
             </label>
-            {/* {formik.touched.password && formik.errors.password && (
+            {formik.touched.password && formik.errors.password && (
               <span role="alert" className="text-danger text-xs mt-1">
                 {formik.errors.password}
               </span>
-            )} */}
+            )}
             <div className="flex justify-end">
               <Link
                 to={
@@ -183,15 +196,17 @@ const Login = () => {
           </div>
 
           {/* Recordar inicio de sesión */}
+          <label className="checkbox-group">
+            <input
+              className="checkbox checkbox-sm"
+              type="checkbox"
+              checked={formik.values.remember}
+              onChange={formik.handleChange}
+              name="remember"
+            />
+            <span className="checkbox-label">Recordar inicio de sesión</span>
+          </label>
 
-          {/* <label className="checkbox-group">
-          <input
-            className="checkbox checkbox-sm"
-            type="checkbox"
-            {...formik.getFieldProps('remember')}
-          />
-          <span className="checkbox-label">Recordar inicio de sesión</span>
-        </label> */}
           <button
             type="submit"
             className="btn btn-primary flex justify-center grow"
@@ -200,19 +215,16 @@ const Login = () => {
             {loading ? 'Por favor espere...' : 'Iniciar Sesión'}
           </button>
           <div className="flex items-center justify-center font-medium">
-            <span className="text-2sm text-gray-600 me-1.5">¿Necesitas una cuenta?</span>
+            <span className="text-2sm text-gray-600 me-1.5"></span>
             <Link
               to={currentLayout?.name === 'auth-branded' ? '/auth/signup' : '/auth/classic/signup'}
               className="text-2sm link"
             >
-              <span className="text-1xl font-semibold text-foreground hover:text-primary">
-                Registrarse
-              </span>
+              <span className="text-1xl font-semibold text-foreground hover:text-primary"></span>
             </Link>
           </div>
         </form>
       </div>
-      
     </div>
   );
 };

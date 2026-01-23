@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Column, ColumnDef, RowSelectionState } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,6 @@ import {
 } from '@/components';
 import { CommonRating } from '@/partials/common';
 import { Team, QueryApiResponse } from './teams-types';
-import axios from 'axios';
 import { formatIsoDate } from '@/utils/Date';
 import { TeamUsers } from './TeamUsers';
 import { Input } from '@/components/ui/input';
@@ -30,12 +29,12 @@ const Teams = () => {
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
-        column.setFilterValue(inputValue); // Apply the filter only on Enter
+        column.setFilterValue(inputValue);
       }
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInputValue(event.target.value); // Update local state
+      setInputValue(event.target.value);
     };
 
     return (
@@ -43,7 +42,7 @@ const Teams = () => {
         placeholder="Filter..."
         value={inputValue}
         onChange={handleChange}
-        onKeyDown={handleKeyDown} // Trigger filter on Enter key
+        onKeyDown={handleKeyDown}
         className="h-9 w-full max-w-40"
       />
     );
@@ -158,13 +157,9 @@ const Teams = () => {
         });
       }
 
-      const response = await axios.get<TeamsQueryApiResponse>(
-        `${import.meta.env.VITE_APP_API_URL}/teams/query?${queryParams.toString()}`
-      );
-
       return {
-        data: response.data.data, // Server response data
-        totalCount: response.data.pagination.total // Total count for pagination
+        data: [],
+        totalCount: 0
       };
     } catch (error) {
       toast(`Connection Error`, {
@@ -204,15 +199,13 @@ const Teams = () => {
       if (e.key === 'Enter') {
         setSearchQuery(inputValue);
         if (inputValue.trim() === '') {
-          // Remove the 'query' filter if input is empty
           table.setColumnFilters(
-            table.getState().columnFilters.filter((filter) => filter.id !== 'query') // Exclude the filter with id 'query'
+            table.getState().columnFilters.filter((filter) => filter.id !== 'query')
           );
         } else {
-          // Add or update the 'query' filter
           table.setColumnFilters([
-            ...table.getState().columnFilters.filter((filter) => filter.id !== 'query'), // Remove existing 'query' filter
-            { id: 'query', value: inputValue }, // Add the new filter
+            ...table.getState().columnFilters.filter((filter) => filter.id !== 'query'),
+            { id: 'query', value: inputValue }
           ]);
         }
       }
