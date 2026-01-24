@@ -1,2 +1,2 @@
 export * from './profile-details';
-export * from './change-password';
+export * from './student-profile';

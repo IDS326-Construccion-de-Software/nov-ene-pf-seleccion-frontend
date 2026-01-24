@@ -69,7 +69,7 @@ import { AcademicSchedulePage, QualificationPage } from '@/pages/revision/pages'
 import { CareerCurriculumPage } from '@/pages/academic-record/pages/career-curriculum';
 import { RecordCareerPage } from '@/pages/academic-record/pages';
 import { SupportCenterPage } from '@/pages/help/pages/support-center/support-center.component';
-import { ProfileDetailsPage, ProfileChangePasswordPage } from '@/pages/profile/pages';
+import { StudentProfileContent } from '@/pages/profile/pages/student-profile';
 
 const AppRoutingSetup = (): ReactElement => {
   return (
@@ -82,9 +82,8 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/" element={<DefaultPage />} />
           <Route path="/dark-sidebar" element={<AppLayoutDarkSidebarPage />} />
 
-          {/* Profile Pages */}
-          <Route path="/profile/details" element={<ProfileDetailsPage />} />
-          <Route path="/profile/change-password" element={<ProfileChangePasswordPage />} />
+          {/* Profile Pages - Updated to use StudentProfileContent matching design reference */}
+          <Route path="/profile/details" element={<StudentProfileContent />} />
           {/* aqui va la ruta de change-password esta afuera para poder probar ya que la api de login para pruebas dejo de funcionar */}
 
           {/* Financial Account Pages */}
