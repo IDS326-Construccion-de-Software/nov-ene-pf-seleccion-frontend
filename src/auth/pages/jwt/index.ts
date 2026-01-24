@@ -4,3 +4,6 @@ export * from './Signup';
 export * from './CheckEmail';
 export * from './TwoFactorAuth';
 export * from './ChangePassword';
+export * from './ForgotPassword';
+export * from './VerifyOtp';
+

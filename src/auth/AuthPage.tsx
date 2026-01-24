@@ -8,7 +8,9 @@ import {
   ResetPasswordEnterEmail,
  // Signup,
   TwoFactorAuth,
-  ChangePassword
+  ChangePassword,
+  ForgotPassword,
+  VerifyOtp
 } from './pages/jwt';
 import { AuthBrandedLayout } from '@/layouts/auth-branded';
 import { AuthLayout } from '@/layouts/auth';
@@ -20,6 +22,8 @@ const AuthPage = () => (
       <Route index element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/cambiar-password" element={<ChangePassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-otp" element={<VerifyOtp />} />
     {/* <Route path="/signup" element={<Signup />} /> */}
       <Route path="/2fa" element={<TwoFactorAuth />} />
       <Route path="/check-email" element={<CheckEmail />} />
@@ -34,6 +38,8 @@ const AuthPage = () => (
     <Route element={<AuthLayout />}>
       <Route path="/classic/login" element={<Login />} />
       <Route path="/classic/cambiar-password" element={<ChangePassword />} />
+      <Route path="/classic/forgot-password" element={<ForgotPassword />} />
+      <Route path="/classic/verify-otp" element={<VerifyOtp />} />
       {/*<Route path="/classic/signup" element={<Signup />} /> */}
       <Route path="/classic/2fa" element={<TwoFactorAuth />} />
       <Route path="/classic/check-email" element={<CheckEmail />} />

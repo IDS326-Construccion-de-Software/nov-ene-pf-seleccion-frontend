@@ -144,9 +144,10 @@ export const getMe = async (token: string): Promise<UserMeResponse> => {
 };
 
 export interface ChangePasswordRequest {
-  contraseñaActual: string;
-  contraseñaNueva: string;
-  confirmarContraseña: string;
+  correoInstitucional?: string;
+  passwordActual: string;
+  nuevaPassword: string;
+  confirmarPassword: string;
 }
 
 export interface ChangePasswordResponse {
@@ -182,11 +183,76 @@ export const changePassword = async (
   }
 };
 
+/**
+ * Inicia el flujo de recuperación de contraseña
+ */
+export const forgotPassword = async (correoInstitucional: string): Promise<{ message: string }> => {
+  try {
+    const { data } = await axios.post<{ message: string }>(
+      `${API_URL}/auth/forgot-password`,
+      { correoInstitucional },
+      {
+        headers: {
+          Authorization: undefined
+        }
+      }
+    );
+    return data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'Error al procesar la solicitud';
+    throw new Error(message);
+  }
+};
+
+export interface ResetPasswordRequest {
+  correoInstitucional: string;
+  codigoOtp: string;
+  nuevaPassword: string;
+  confirmarPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}
+
+/**
+ * Restablece la contraseña usando OTP
+ */
+export const resetPassword = async (
+  payload: ResetPasswordRequest
+): Promise<ResetPasswordResponse> => {
+  try {
+    const { data } = await axios.post<ResetPasswordResponse>(
+      `${API_URL}/auth/reset-password`,
+      payload,
+      {
+        headers: {
+          Authorization: undefined
+        }
+      }
+    );
+    return data;
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'Error al restablecer la contraseña';
+    throw new Error(message);
+  }
+};
+
 export default {
   login,
   refreshToken,
   logout,
   getMe,
   changePassword,
+  forgotPassword,
+  resetPassword,
   decodeJWT
 };

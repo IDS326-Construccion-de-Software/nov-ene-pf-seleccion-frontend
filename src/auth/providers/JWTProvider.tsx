@@ -130,7 +130,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       setCurrentUser(user);
       axios.defaults.headers.common['Authorization'] = `Bearer ${loginResponse.accessToken}`;
     } catch (error: any) {
-      // Verificar primero si es error 403 con PASSWORD_CHANGE_REQUIRED
+      // Verificar primero si es error 403 
       if (error.response?.status === 403) {
         const code = 
           error.response?.data?.code || 
@@ -139,7 +139,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
           error.response?.statusText ||
           '';
         
-        // Verificar si contiene alguna variación de PASSWORD_CHANGE_REQUIRED
+        // Verificar si contiene alguna variación
         const isPasswordChangeRequired = 
           code === 'PASSWORD_CHANGE_REQUIRED' || 
           code?.toUpperCase() === 'PASSWORD_CHANGE_REQUIRED' ||

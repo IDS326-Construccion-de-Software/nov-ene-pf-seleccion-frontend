@@ -193,8 +193,8 @@ const Login = () => {
               <Link
                 to={
                   currentLayout?.name === 'auth-branded'
-                    ? '/auth/reset-password'
-                    : '/auth/classic/reset-password'
+                    ? '/auth/forgot-password'
+                    : '/auth/classic/forgot-password'
                 }
                 className="text-2sm link shrink-0"
               >

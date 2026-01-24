@@ -2,14 +2,20 @@ import { Container } from '@/components';
 import { Toolbar, ToolbarHeading } from '@/layouts/applayout/toolbar';
 import { KeenIcon } from '@/components';
 import { PersonalInfo, InfoStudent } from '../blocks';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileDetailsPage = () => {
+  const navigate = useNavigate();
+
   return (
     <Container width="fluid">
       <Toolbar>
         <ToolbarHeading title="Perfil" description="Información del perfil" />
         <div className="flex gap-2">
-          <button className="btn btn-sm btn-primary gap-2">
+          <button
+            className="btn btn-sm btn-primary gap-2"
+            onClick={() => navigate('/profile/change-password')}
+          >
             <KeenIcon icon="lock" className="text-base" />
             Cambiar contraseña
           </button>
