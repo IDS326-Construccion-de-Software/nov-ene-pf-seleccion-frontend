@@ -80,6 +80,8 @@ const AppRoutingSetup = (): ReactElement => {
         <Route element={<AppLayout />}>
           {/* Dashboard Pages */}
           <Route path="/" element={<DefaultPage />} />
+
+          {/* dashboard */}
           <Route path="/dark-sidebar" element={<AppLayoutDarkSidebarPage />} />
 
           {/* Profile Pages - Updated to use StudentProfileContent matching design reference */}
